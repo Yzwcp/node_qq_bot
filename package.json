@@ -1,0 +1,27 @@
+{
+	"dependencies": {
+		"@koa/cors": "^3.4.1",
+		"express": "^4.18.1",
+		"koa": "^2.13.4",
+		"koa-bodyparser": "^4.3.0",
+		"koa-router": "^12.0.0",
+		"mime-types": "^2.1.35",
+		"nedb": "^1.8.0",
+		"nodejs-websocket": "^1.7.2",
+		"oicq": "^2.3.1",
+		"qs": "^6.11.0"
+	},
+	"scripts": {
+		"pkg": "pkg  a.js -t win"
+	},
+	"bin": "a.js",
+	"pkg": {
+		"assets": [
+			"data/**/*",
+			"views/**/*",
+			"dist/**/*",
+			"runtime/**/*",
+			"./node_modules/**/*.js"
+		]
+	}
+}
