@@ -12,16 +12,10 @@
 		"qs": "^6.11.0"
 	},
 	"scripts": {
-		"pkg": "pkg  a.js -t win"
+		"pkgs": "pkg -t win app.js --out-path=dist/"
 	},
-	"bin": "a.js",
+	"bin": "./app.js",
 	"pkg": {
-		"assets": [
-			"data/**/*",
-			"views/**/*",
-			"dist/**/*",
-			"runtime/**/*",
-			"./node_modules/**/*.js"
-		]
+		"assets":["./websocket/*.js","./bot/*.js","./*.js","./route/*.js","./api/**/*.js","./runtime/**/*.js","./runtime/**/**/*.js","./runtime/*.js","./node_modules/**/*.js"]
 	}
 }

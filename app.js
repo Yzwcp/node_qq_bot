@@ -1,9 +1,9 @@
 const Koa = require('koa')
 const app = new Koa()
-const router = require('./route/index.js')
+const router = require('./src/route/index.js')
 const cors = require('@koa/cors')
 const bodyParser = require('koa-bodyparser')
-const ws = require('./websocket/index')
+const ws = require('./src/websocket/index')
 
 
 
