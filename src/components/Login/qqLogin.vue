@@ -67,12 +67,14 @@ ws.onclose = function (e) {
     console.log("服务器关闭");
 }
 ws.onmessage = function (e) {
+    console.log(e);
 
-    const [success,code]= e.data.split(':')
+    return
+    const [success, code] = e.data.split(':')
     onStatus.value = code
     switch (code) {
         case onStatusType.loginQrcode:
-            if (success==1) {
+            if (success == 1) {
                 reloadQrImg()
             }
             //登录二维码
@@ -83,8 +85,8 @@ ws.onmessage = function (e) {
             }
             break;
         case onStatusType.login:
-            if(success==1){
-                 
+            if (success == 1) {
+
             }
             break
         default:
@@ -112,7 +114,10 @@ const reloadQrImg = () => {
     qrCodeRef.value?.appendChild(new_img)
 }
 const wsSend = (code = onStatusType.loginQrcodeRefresh) => {
-    ws.send(code)
+    ws.send(JSON.stringify({
+        code,
+        data: {}
+    }))
 }
 
 </script>

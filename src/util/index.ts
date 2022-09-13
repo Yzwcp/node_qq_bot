@@ -38,17 +38,17 @@ export function openSocket(url: string = "") {
     if (!url) {
         url = wsUrl;
     }
-    const user_id = ""; // 当前用户信息，后台配置
-    const session_id = ""; // 获取验证信息，后台配置
-    if (!user_id || !session_id) {
-        console.error({ message: "重新登录" });
-        return;
-    }
-    const connectURL = `${url}?session_id=${session_id}&user_id=${user_id}`;
+    // const user_id = ""; // 当前用户信息，后台配置
+    // const session_id = ""; // 获取验证信息，后台配置
+    // if (!user_id || !session_id) {
+    //     console.error({ message: "重新登录" });
+    //     return;
+    // }
+    // const connectURL = `${url}?session_id=${session_id}&user_id=${user_id}`;
     websocket = null;
     needReconnect = true;
     // 监听websocket
-    watchSocket(connectURL);
+    watchSocket(url);
 }
 /**
  * 连接socket并且监听socket
@@ -65,7 +65,7 @@ function watchSocket(url: string) {
 
     // 连接已准备好
     client.onopen = (data: any) => {
-        heartCheck.start();
+        // heartCheck.start();
         console.log('-onopen-连接已准备好--', data);
         if (websocketTimeout) {
             console.log('--websocketTimeout--', websocketTimeout);

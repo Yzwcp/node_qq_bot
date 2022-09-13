@@ -9,5 +9,6 @@ import { createPinia } from 'pinia'
 const app = createApp(App)
 
 axios.defaults.baseURL = "http://127.0.0.1:1125"
+
 app.config.globalProperties.$axios = axios
 app.use(createPinia()).use(router).use(ElementPlus).mount('#app')
