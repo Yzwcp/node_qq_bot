@@ -7,7 +7,7 @@ const db = require('../nedb/nedb')
 
 bot
     .on("system.login.slider", function (e) {
-        
+
         console.log(e);
         process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
     })
@@ -26,8 +26,8 @@ bot
             bot.submitSmsCode(input.toString());
             resolve();
         });
-        })
-    .on("system.online",async function () {
+    })
+    .on("system.online", async function () {
         // 你的账号已上线，你可以做任何事
         let friend = []
         let group = []
@@ -44,13 +44,14 @@ bot
         try {
             // 查是否有缓存好友列表、群列表
             let cacheFriend = await db('group').findOne()
-            if(!cacheFriend){
-                console.log(1);
+            if (!cacheFriend) {
+                bot.logger.mark("缓存朋友列表");
                 await db('group').insert(group)
             }
             let cacheGroup = await db('friend').findOne()
-            if(!cacheGroup){
-                console.log(2);
+            if (!cacheGroup) {
+                bot.logger.mark("缓存群列表");
+
                 await db('friend').insert(friend)
             }
         } catch (error) {
@@ -58,11 +59,11 @@ bot
         }
         try {
             let cacheProfile = await db('profile').findOne()
-            if(!cacheProfile){
+            if (!cacheProfile) {
                 const user = new User(this, this.uin)
                 const simpleInfo = await user.getSimpleInfo()
                 await db('profile').insert({
-                    nickname:this.nickname,
+                    nickname: this.nickname,
                     uin: this.uin,
                     avatarUrl: user.getAvatarUrl(),
                     ...simpleInfo
@@ -77,19 +78,32 @@ bot
     .on("internal.error.qrcode", function (e) {
         console.log(e);
     })
+    // .on('message.private', function (e) {
+    //     // sendData(conn, '1 ')
+    //     // console.log(e);
+    // })
     .login('qq......')
 
 const wsCallback = (conn) => {
+    // // console.log(conn);
+    // setInterval(() => {
+    //     sendData(conn, 'kaishi ')
+    // }, 1000)
     conn.on("text", (str) => {
+
+
         const { data, code = 'web:err' } = JSON.parse(str)
+        bot.on('message.private', function (e) {
+            sendData(conn, '1 ')
+        })
         // conn.sendText("轮训的返回值："  data) 
         switch (code) {
             case 'login.qrcode.refresh':
                 (function () {
                     bot.login().then(res => {
-                        let success = -1 
+                        let success = -1
                         success = botMap.get('system.login.qrcode')
-                        conn.sendText(`${success}:${code}`)
+                        sendData(conn, { success, data: {}, code })
                     })
                 }())
 
@@ -97,13 +111,20 @@ const wsCallback = (conn) => {
             case 'login':
                 bot.login().then(() => {
                     setTimeout(() => {
-                        let success = -1 
+                        let success = -1
                         success = botMap.get('system.online')
-                        conn.sendText(`${success}:${code}`)
+                        sendData(conn, { success, data: {}, code })
                     }, 1000)
                 })
                 break;
-
+            case 'system.online':
+                console.log(code);
+                bot.on('message.private', function (e, c) {
+                    console.log(e);
+                    console.log('111111111111111111111');
+                    console.log(c);
+                })
+                break;
             default:
                 break;
         }
@@ -122,6 +143,10 @@ const wsCallback = (conn) => {
     });
     conn.on("error", () => {
     });
+}
+
+function sendData(c, data) {
+    c.sendText(data instanceof String ? data : JSON.stringify(data))
 }
 module.exports = {
     bot,

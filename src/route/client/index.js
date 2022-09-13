@@ -29,12 +29,13 @@ router.get('/loginqrcode', async (ctx) => {
     ctx.body = file
 })
 router.get('/friend', async (ctx) => {
-    let data = await db('test').find()
-    ctx.body = {
-        code:'1',
-        data,
-        msg:''
-    }
+    let data = await db('friend').find()
+    ctx.body = resultBody(data, 1)
+
+})
+router.get('/profile', async (ctx) => {
+    let data = await db('profile').findOne()
+    ctx.body = resultBody(data, 1)
 })
 function sleep() {
     return new Promise((re, rj) => {
@@ -42,6 +43,11 @@ function sleep() {
             re()
         }, 2000)
     })
+}
+function resultBody(data = {}, code = 1, msg = '') {
+    return {
+        code, data, msg
+    }
 }
 
 module.exports = router.routes()
