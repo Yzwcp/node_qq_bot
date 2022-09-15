@@ -37,6 +37,10 @@ router.get('/profile', async (ctx) => {
     let data = await db('profile').findOne()
     ctx.body = resultBody(data, 1)
 })
+router.get('/group', async (ctx) => {
+    let data = await db('group').find()
+    ctx.body = resultBody(data, 1)
+})
 function sleep() {
     return new Promise((re, rj) => {
         setTimeout(() => {

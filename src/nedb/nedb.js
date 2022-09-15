@@ -34,7 +34,9 @@ DB.prototype.find = function (query, select) {
       if (err) {
         return reject(err)
       }
-      resolve(docs)
+      setTimeout(()=>{
+        resolve(docs)
+      },600)
     })
   })
 }
