@@ -1,7 +1,7 @@
 <template>
     <el-card>
-        {{profile.userInfo}}
-        <el-table :data="data.allList" :style="{width: '100%;'}" height="900">
+        <!-- {{profile.userInfo}} -->
+        <el-table :data="allData.friendList" v-loading="allData.tableLoading" :style="{width: '100%;'}" height="900">
             <el-table-column prop="nickname" label="qq昵称" />
             <el-table-column prop="remark" label="备注" />
             <el-table-column prop="sex" label="性别">
@@ -15,21 +15,24 @@
 </template>
   
 <script lang="ts" setup scope>
-import { reactive } from 'vue';
-import {useProfile} from '../../store/index';
-const data: any = reactive({
-    allList: []
-})
-// 修改值得方法
-const profile = useProfile()
+import { reactive ,getCurrentInstance} from 'vue';
+// import {useProfile} from '../../store/index';
+const allData: any = reactive({
+    friendList: [],
+    tableLoading:false,
 
-// 1.    
-//  {{profile.userInfo}}
-profile.$patch((state=>{
-    state.userInfo={
-        d:10
+})
+const { $axios }: any = getCurrentInstance()?.appContext.config.globalProperties;
+
+const initData = async () =>{
+    allData.tableLoading=true
+    const {data,code} = await $axios({ url:'/client/friend',method:'get'})
+    if(code===1){
+        allData.friendList = data
     }
-}))
-profile.modify()
+    allData.tableLoading=false
+   
+}
+initData()
 
 </script>

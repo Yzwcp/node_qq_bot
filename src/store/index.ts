@@ -22,7 +22,7 @@ export const useWebSocket = defineStore('WebSocket', {
             // 监听websocket
             this.websocket.onmessage = (data: any) => {
                 // heartCheck.reset();
-                console.log('-onmessage-收到的消息为--', data);
+                // console.log('-onmessage-收到的消息为--', data);
             }
 
             // 连接已准备好

@@ -1,6 +1,6 @@
 <template>
     <el-card>
-        <el-table :data="data.allList" :style="{width: '100%;'}" height="900">
+        <el-table :data="allData.groupList" v-loading="allData.tableLoading" :style="{width: '100%;'}" height="900">
             <el-table-column prop="group_name" label="群名称">
                 <template #default="scope">
                     {{scope.row.group_name}} <el-tag type="info">{{scope.row.group_id}}</el-tag>
@@ -22,22 +22,23 @@
 </template>
   
 <script lang="ts" setup scope>
-import { reactive } from 'vue';
+import { reactive, getCurrentInstance,} from 'vue';
 
-const data: any = reactive({
-    allList: []
+const allData: any = reactive({
+    groupList: [],
+    tableLoading:false,
 })
-try {
-    let cacheData: any = JSON.parse(localStorage.getItem('data') as string).gl
-console.log(cacheData);
+const { $axios }: any = getCurrentInstance()?.appContext.config.globalProperties;
 
-for (let key of Object.keys(cacheData)) {
-
-    data.allList.push(cacheData[key])
+const initData = async () =>{
+    allData.tableLoading = true
+    const {data,code} = await $axios({ url:'/client/group',method:'get'})
+    allData.tableLoading = false
+    if(code===1){
+        allData.groupList = data
+    }
+   
 }
-
-} catch (error) {
-    
-}
+initData()
 
 </script>

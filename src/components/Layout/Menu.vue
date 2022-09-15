@@ -1,5 +1,5 @@
 <template>
-    <el-menu default-active="/my/group" @open="handleOpen" @close="handleClose" style="height: 100vh;" @select="select">
+    <el-menu :default-active="route.path" @open="handleOpen" @close="handleClose" style="height: 100vh;" @select="select">
         <el-sub-menu index="/setting">
             <template #title>
                 <el-icon>
@@ -11,7 +11,7 @@
                 <el-menu-item index="/setting/qqlogin">
                     <router-link to="/setting/qqlogin">qq机器人</router-link>
                 </el-menu-item>
-                <el-menu-item index="1-2">item two</el-menu-item>
+                <el-menu-item index="1-2">退出</el-menu-item>
             </el-menu-item-group>
 
         </el-sub-menu>
@@ -36,12 +36,18 @@
 </template>
   
 <script lang="ts" setup>
+
 import {
     Document,
     Menu as IconMenu,
     Location,
     Setting,
 } from '@element-plus/icons-vue'
+import {useRoute} from 'vue-router';
+
+const route = useRoute()
+
+
 const handleOpen = (key: string, keyPath: string[]) => {
     // console.log(key, keyPath)
 }
