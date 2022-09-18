@@ -15,23 +15,24 @@
 </template>
   
 <script lang="ts" setup scope>
-import { reactive ,getCurrentInstance} from 'vue';
-// import {useProfile} from '../../store/index';
+import { reactive, getCurrentInstance } from 'vue';
+import { useBot } from '../../store/auth';
 const allData: any = reactive({
     friendList: [],
-    tableLoading:false,
+    tableLoading: false,
 
 })
+const profile = useBot()
 const { $axios }: any = getCurrentInstance()?.appContext.config.globalProperties;
 
-const initData = async () =>{
-    allData.tableLoading=true
-    const {data,code} = await $axios({ url:'/client/friend',method:'get'})
-    if(code===1){
+const initData = async () => {
+    allData.tableLoading = true
+    const { data, code } = await $axios({ url: '/client/friend', params: { uin: profile.bot.uin }, method: 'get' })
+    if (code === 1) {
         allData.friendList = data
     }
-    allData.tableLoading=false
-   
+    allData.tableLoading = false
+
 }
 initData()
 

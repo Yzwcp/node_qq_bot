@@ -1,0 +1,40 @@
+{
+  post_type: 'message',
+  message_id: 'EiNgjmnFzUcAAB1qtRl8zWMl8kAB',
+  user_id: 1774570823,
+  time: 1663431232,
+  seq: 7530,
+  rand: 3038346445,
+  font: '微软雅黑',
+  message: [
+        { type: 'text', text: '1'
+        }
+    ],
+  raw_message: '1',
+  message_type: 'group',
+  sender: {
+    user_id: 1774570823,
+    nickname: '恢复出厂设置',
+    card: '',
+    sex: 'unknown',
+    age: 0,
+    area: '',
+    level: 1,
+    role: 'owner',
+    title: ''
+    },
+  group_id: 304308366,
+  group_name: '点烟抽寂寞、、1、恢',
+  block: false,
+  sub_type: 'normal',
+  anonymous: null,
+  atme: false,
+  atall: false,
+  group: Group {},
+  member: Member {},
+  reply: [Function (anonymous)
+    ],
+  recall: [Function (anonymous)
+    ],
+  self_id: 1494993218
+}

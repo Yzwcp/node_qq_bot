@@ -1,5 +1,6 @@
 <template>
-    <el-menu :default-active="route.path" @open="handleOpen" @close="handleClose" style="height: 100vh;" @select="select">
+    <el-menu :default-active="route.path" @open="handleOpen" @close="handleClose" style="height: 100vh;"
+        @select="select">
         <el-sub-menu index="/setting">
             <template #title>
                 <el-icon>
@@ -7,11 +8,11 @@
                 </el-icon>
                 <span>设置</span>
             </template>
-            <el-menu-item-group title="基本设置">
+            <el-menu-item-group title="qq基本设置">
                 <el-menu-item index="/setting/qqlogin">
-                    <router-link to="/setting/qqlogin">qq机器人</router-link>
+                    <router-link to="/setting/qqlogin">登录</router-link>
                 </el-menu-item>
-                <el-menu-item index="1-2">退出</el-menu-item>
+                <el-menu-item index="1-2">配置</el-menu-item>
             </el-menu-item-group>
 
         </el-sub-menu>
@@ -43,7 +44,7 @@ import {
     Location,
     Setting,
 } from '@element-plus/icons-vue'
-import {useRoute} from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const route = useRoute()
 
