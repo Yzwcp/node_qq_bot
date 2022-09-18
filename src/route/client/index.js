@@ -4,10 +4,10 @@ const router = new Router()
 const fs = require('fs')
 const path = require('path')
 router.prefix('/client')
-const db = require('../../nedb/nedb')
+const DB = require('../../nedb/nedb')
 
 router.get('/test', async (ctx) => {
-    let data = await db('profile').find()
+    let data = await DB(ctx.query.uin, 'profile').find()
     ctx.body = {
         data
     }
@@ -29,16 +29,24 @@ router.get('/loginqrcode', async (ctx) => {
     ctx.body = file
 })
 router.get('/friend', async (ctx) => {
-    let data = await db('friend').find()
+    let data = await DB(ctx.query.uin, 'friend').find()
     ctx.body = resultBody(data, 1)
 
 })
 router.get('/profile', async (ctx) => {
-    let data = await db('profile').findOne()
+    let data = await DB(ctx.query.uin, 'profile').findOne()
     ctx.body = resultBody(data, 1)
 })
 router.get('/group', async (ctx) => {
-    let data = await db('group').find()
+    let data = await DB(ctx.query.uin, 'group').find()
+    ctx.body = resultBody(data, 1)
+})
+router.get('/message', async (ctx) => {
+    let data = await DB(ctx.query.uin, 'message').find()
+    ctx.body = resultBody(data, 1)
+})
+router.get('/status', async (ctx) => {
+    let data = await DB(ctx.query.uin, 'status').findOne()
     ctx.body = resultBody(data, 1)
 })
 function sleep() {

@@ -1,158 +1,164 @@
 
-const botMap = new Map()
-const { createClient, User } = require("oicq")
-const qs = require('qs')
+const { createClient, User, Client } = require("oicq")
 const db = require('../nedb/nedb')
 let ociq = new WeakMap()
 
-// bot
-//     .on("system.login.slider", function (e) {
 
-//         console.log(e);
-//         process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
-//     })
-//     .on("system.login.qrcode", function (e) {
-//         // 标记已经生成登录二维码
-//         botMap.set('system.login.qrcode', 1)
-//         this.logger.mark("扫码后按Enter完成登录")
-//     })
-//     .on("system.login.error", (e) => {
-//         console.log(e);
-//     })
-//     .on("system.login.device", () => {
-//         bot.logger.mark("输入密保手机收到的短信验证码后按下回车键继续。");
-//         bot.sendSmsCode();
-//         process.stdin.once("data", (input) => {
-//             bot.submitSmsCode(input.toString());
-//             resolve();
-//         });
-//     })
-//     .on("system.online", async function () {
-//         // 你的账号已上线，你可以做任何事
-//         let friend = []
-//         let group = []
-//         for (const key of this.fl.keys()) {
-//             friend.push({
-//                 ...this.fl.get(key)
-//             })
-//         }
-//         for (const key of this.gl.keys()) {
-//             group.push({
-//                 ...this.gl.get(key)
-//             })
-//         }
-//         try {
-//             // 查是否有缓存好友列表、群列表
-//             let cacheFriend = await db('group').findOne()
-//             if (!cacheFriend) {
-//                 bot.logger.mark("缓存朋友列表");
-//                 await db('group').insert(group)
-//             }
-//             let cacheGroup = await db('friend').findOne()
-//             if (!cacheGroup) {
-//                 bot.logger.mark("缓存群列表");
+const self = {
+    uin: '',
+    onSystemLoginSlider(cb) {
+        ociq.on('system.login.slider', cb)
+    },
+    onSystemLoginDevice(cb) {
+        ociq.on('system.login.device', cb)
+    },
+    onSystemLine(conn, data) {
+        ociq.on('system.online', async function () {
+            self.uin = this.uin
 
-//                 await db('friend').insert(friend)
-//             }
-//         } catch (error) {
-//             console.log(error);
-//         }
-//         try {
-//             let cacheProfile = await db('profile').findOne()
-//             if (!cacheProfile) {
-//                 const user = new User(this, this.uin)
-//                 const simpleInfo = await user.getSimpleInfo()
-//                 await db('profile').insert({
-//                     nickname: this.nickname,
-//                     uin: this.uin,
-//                     avatarUrl: user.getAvatarUrl(),
-//                     ...simpleInfo
-//                 })
-//             }
-//         } catch (error) {
-//             console.log(error);
-//         }
-//         botMap.set('system.online', 1)
-//         console.log(`来自plugin-online: 我是${this.nickname}(${this.uin})，我有${this.fl.size}个好友，${this.gl.size}个群`)
-//     })
-//     .on("internal.error.qrcode", function (e) {
-//         console.log(e);
-//     })
-    // .on('message.private', function (e) {
-    //     // sendData(conn, '1 ')
-    //     // console.log(e);
-    // })
-    // .login('qq......')
+            let lineStatus = await db(this.uin, 'status').find()
+            if (lineStatus.length == 0) {
+                await db(this.uin, 'status').insert({
+                    status: 1
+                })
+            } else {
+                await db(this.uin, 'status').update({ status: -1 }, { $set: { status: 1 } })
+            }
+            let friend = []
+            let group = []
+            for (const key of this.fl.keys()) {
+                friend.push({
+                    ...this.fl.get(key)
+                })
+            }
+            for (const key of this.gl.keys()) {
+                group.push({
+                    ...this.gl.get(key)
+                })
+            }
 
+            try {
+                // 查是否有缓存好友列表、群列表
+
+                let cacheFriend = await db(this.uin, 'group').find()
+                if (cacheFriend.length == 0) {
+                    this.logger.mark("缓存朋友列表");
+                    await db(this.uin, 'group').insert(group)
+                }
+                let cacheGroup = await db(this.uin, 'friend').find()
+                if (cacheGroup.length == 0) {
+                    this.logger.mark("缓存群列表");
+
+                    await db(this.uin, 'friend').insert(friend)
+                }
+            } catch (error) {
+                console.log(error);
+            }
+            try {
+                let cacheProfile = await db(this.uin, 'profile').find()
+                if (cacheProfile.length == 0) {
+                    const user = new User(this, this.uin)
+                    const simpleInfo = await user.getSimpleInfo()
+                    this.logger.mark("个人信息");
+                    await db(simpleInfo.user_id, 'profile').insert({
+                        nickname: this.nickname,
+                        uin: this.uin,
+                        avatarUrl: user.getAvatarUrl(),
+                        ...simpleInfo
+                    })
+                }
+            } catch (error) {
+                console.log(error);
+            }
+            sendData(conn, { status: this.status, ...data }, 'logined')
+
+        })
+    },
+    //消息
+    onMessage(cb) {
+        ociq.on('message', cb)
+    },
+
+    formatMessage(e) {
+        try {
+            let d = {
+                post_type: e.post_type,
+                message_id: e.message_id,
+                user_id: e.user_id,
+                time: e.time,
+                seq: e.seq,
+                message: e.message,
+                raw_message: e.raw_message,
+                message_type: e.message_type,
+                sender: e.sender,
+                group_id: e.group_id,
+                group_name: e.group_name,
+                sub_type: e.sub_type,
+                atme: e.atme,
+                atall: e.atall,
+                from_id: e.from_id,
+                auto_reply: e.auto_reply,
+                self_id: e.self_id,
+            }
+            return d
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+}
 const wsCallback = (conn) => {
 
-    conn.on("text", (str) => {
+    conn.on("text", async (str) => {
         const { data, code = null } = JSON.parse(str)
-        let success = true
-        console.log(data);
+        console.log('shou', str);
+
         switch (code) {
+            case 'ping':
+                sendData(conn, {}, 'ping')
+                break;
             case 'system.login.slider':
-                ociq = createClient(data.account, { platform: 4 })
+                ociq = createClient(data.account, { platform: data.platform || 4 })
                 ociq.login(data.password)
-                ociq.on("system.login.slider", function (e) {
-                    console.log(e);
+                //监听账号密码登录
+                self.onSystemLoginSlider((e) => sendData(conn, { ticket: e.url }, code))
+                //监听账号是否安全登录
+                self.onSystemLoginDevice((e) => sendData(conn, {}, 'needCode'))
+                //监听账号上线
+                self.onSystemLine(conn, data)
+                //监听私聊消息
+                self.onMessage(async function (e) {
+                    const messageData = self.formatMessage(e)
+                    await db(this.uin, 'message').insert(messageData)
+                    sendData(conn, messageData, 'message')
                 })
                 break;
-            case 'login':
+            case 'sendCode':
+                ociq.sendSmsCode();
+                break;
+            case 'replayCode':
+                ociq.submitSmsCode(data.verificationCode.toString());
+                break
+            case 'replayTicket':
                 ociq.submitSlider(String(data.ticket).trim())
-                ociq.on("system.login.device", () => {
-                    bot.logger.mark("输入密保手机收到的短信验证码后按下回车键继续。");
-                    bot.sendSmsCode();
-                    process.stdin.once("data", (input) => {
-                        bot.submitSmsCode(input.toString());
-                        resolve();
-                    });
+                break;
+            case 'loginStatus':
+                let lineStatus = await db(data.account, 'status').findOne()
+                console.log(lineStatus);
+                sendData(conn, { account: data.account, status: lineStatus.status || -1, }, ociq.status > 0 ? 'loginStatus' : "")
+                break
+            case 'logout':
+                ociq.logout().then(async () => {
+                    await db(self.uin, 'status').update({ status: 1 }, { $set: { status: -1 } })
+                    sendData(conn, { status: -1, account: self.uin }, code)
                 })
-                break;   
-            case 'aaa':
-                ociq.login().then(res=>{
-                    sendData(conn,{code,data,success})
-                })
-            
-                break;   
+                break;
             default:
                 break;
         }
         // bot.on('message.private', function (e) {
         //     sendData(conn, '1 ')
         // })
-        // conn.sendText("轮训的返回值："  data) 
-        // switch (code) {
-        //     case 'login.qrcode.refresh':
-        //         (function () {
-        //             bot.login().then(res => {
-        //                 let success = -1
-        //                 success = botMap.get('system.login.qrcode')
-        //                 sendData(conn, { success, data: {}, code })
-        //             })
-        //         }())
-
-        //         break;
-        //     case 'login':
-        //         bot.login().then(() => {
-        //             setTimeout(() => {
-        //                 let success = -1
-        //                 success = botMap.get('system.online')
-        //                 sendData(conn, { success, data: {}, code })
-        //             }, 1000)
-        //         })
-        //         break;
-        //     case 'system.online':
-        //         console.log(code);
-        //         bot.on('message.private', function (e, c) {
-        //             console.log(e);
-        //             console.log('111111111111111111111');
-        //             console.log(c);
-        //         })
-        //         break;
-        //     default:
-        //         break;
-        // }
         // let log = JSON.stringify(bot.getLogList())
         // console.log(log);
         // setTimeout(() => {
@@ -165,7 +171,7 @@ const wsCallback = (conn) => {
 
 
     })
-    conn.on('connect', (e)=>{
+    conn.on('connect', (e) => {
         console.log('connect');
         console.log(e);
     })
@@ -176,9 +182,10 @@ const wsCallback = (conn) => {
     });
 }
 
-function sendData(c, data) {
-    c.sendText(data instanceof String ? data : JSON.stringify(data))
+function sendData(c, data, code = '-1') {
+    c.sendText(data instanceof String ? data : JSON.stringify({ data, code }))
 }
 module.exports = {
-    wsCallback
+    wsCallback,
+    self
 }

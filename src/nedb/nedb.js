@@ -1,10 +1,10 @@
 
 const path = require('path')
-let filePath = path.join(process.cwd(), 'data','db','1494993218')
 const Datastore = require('nedb')
-function DB(database) {
+function DB(uin, database) {
+  const pathName = path.join(process.cwd(), 'data', 'db', uin + "")
   let options = {
-    filename: filePath+'/'+database+'.db',
+    filename: pathName + '/' + database + '.db',
     autoload: true,
   }
   this.db = new Datastore(options)
@@ -34,9 +34,9 @@ DB.prototype.find = function (query, select) {
       if (err) {
         return reject(err)
       }
-      setTimeout(()=>{
+      setTimeout(() => {
         resolve(docs)
-      },600)
+      }, 600)
     })
   })
 }
@@ -87,6 +87,6 @@ DB.prototype.remove = function (query, options) {
     })
   })
 }
-module.exports = (database) => {
-  return new DB(database)
+module.exports = (uin, database) => {
+  return new DB(uin, database)
 }
