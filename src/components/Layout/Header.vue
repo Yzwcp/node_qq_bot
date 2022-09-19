@@ -7,7 +7,7 @@
         <div style="margin-left:4px;">{{bot.botInfo.nickname}}</div>
         <!-- <div>{{data.user?.uin}}</div> -->
         <el-dropdown>
-            <div class="rob_status">
+            <div class="rob_status" v-loading.fullscreen.lock="socket.g_loading" element-loading-text="请打开服务，加载中...">
                 <img src="@/assets/bot.svg" v-if="!bot.botInfo.avatarUrl" alt="">
                 <img src="@/assets/bot_active.svg" v-else alt="">
                 <el-tag v-if="bot.botInfo.avatarUrl">• 在线</el-tag>
@@ -35,11 +35,11 @@ import { ref, toRefs, reactive } from 'vue'
 // import { UserFilled } from '@element-plus/icons-vue';
 import { useBot } from '../../store/auth';
 import { useWebSocket } from '../../store/webSocket';
-
+const socket = useWebSocket()
 const bot = useBot()
 
 const logout = () => {
-    useWebSocket().send({ code: 'logout' })
+    socket.send({ code: 'logout' })
 }
 </script>
 

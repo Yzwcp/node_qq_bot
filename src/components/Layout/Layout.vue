@@ -22,8 +22,8 @@ import { ref, toRefs, reactive } from 'vue'
 import { useRoute, } from 'vue-router'
 import Menu from './Menu.vue';
 import Header from './Header.vue';
-
-
+import { useWebSocket } from '../../store/webSocket';
+const socket = useWebSocket()
 // console.log();
 
 </script>

@@ -23,10 +23,11 @@ export const useWebSocket = defineStore('WebSocket', {
             timeout: 10000, // 定时发送socket
             timeoutSend: 0, // 发送socket延迟函数
             serverTimeoutNumber: 0, //延迟关闭连接
+            loading: true,
         }
     },
     getters: {
-
+        g_loading: (state) => state.loading
     },
     actions: {
         send(text: object | string) {
@@ -40,6 +41,7 @@ export const useWebSocket = defineStore('WebSocket', {
             this.start();
         },
         start() { // socket连接发送
+
             const self = this;
             this.timeoutSend = window.setTimeout(() => {
                 // console.log(1);
@@ -112,6 +114,7 @@ export const useWebSocket = defineStore('WebSocket', {
 
             // 连接已准备好
             this.websocket.onopen = (data: any) => {
+                this.loading = false
                 this.start();
                 let loginInfo: Logined = JSON.parse(localStorage.getItem('OCIQ_ACC') || "[]")
                 if (loginInfo) {
@@ -144,6 +147,7 @@ export const useWebSocket = defineStore('WebSocket', {
             // 关闭连接
             this.websocket.onclose = (data: any) => {
                 console.log('-onclose-关闭连接--', data);
+                this.loading = true
                 this.reconnect()
             }
 
