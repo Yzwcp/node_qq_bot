@@ -16,7 +16,7 @@
   
 <script lang="ts" setup scope>
 import { reactive, getCurrentInstance } from 'vue';
-import { useBot } from '../../store/auth';
+import { useBot } from "../../store/auth";
 const allData: any = reactive({
     friendList: [],
     tableLoading: false,

@@ -16,13 +16,12 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "/@/*": [
-        "src/*"
-      ]
+      "@": ["./src"],
+      "@/": ["./src/*"],
     },
     "skipLibCheck": true,
     "types": [
-      "element-plus/global"
+      "element-plus/global",
     ]
   },
   "include": [
