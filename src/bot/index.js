@@ -1,9 +1,7 @@
 
-const { createClient, User, Client } = require("oicq")
+const { createClient, User, Client, Friend} = require("oicq")
 const db = require('../nedb/nedb')
 let ociq = new WeakMap()
-
-
 const self = {
     uin: '',
     onSystemLoginSlider(cb) {
@@ -81,7 +79,7 @@ const self = {
 
     formatMessage(e) {
         try {
-            let d = {
+            return {
                 post_type: e.post_type,
                 message_id: e.message_id,
                 user_id: e.user_id,
@@ -100,7 +98,6 @@ const self = {
                 auto_reply: e.auto_reply,
                 self_id: e.self_id,
             }
-            return d
         } catch (error) {
             console.log(error);
         }
@@ -108,7 +105,6 @@ const self = {
     }
 }
 const wsCallback = (conn) => {
-
     conn.on("text", async (str) => {
         const { data, code = null } = JSON.parse(str)
         console.log('shou', str);
