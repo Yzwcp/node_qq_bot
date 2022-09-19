@@ -12,7 +12,8 @@
 		"qs": "^6.11.0"
 	},
 	"scripts": {
-		"pkgs": "pkg -t win app.js --out-path=dist/"
+		"pkgs": "pkg -t win app.js --out-path=dist/",
+		"dev": "node app.js"
 	},
 	"bin": "./app.js",
 	"pkg": {

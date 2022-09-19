@@ -17,7 +17,7 @@ const self = {
             self.uin = this.uin
 
             let lineStatus = await db(this.uin, 'status').find()
-            if (lineStatus.length == 0) {
+            if (lineStatus.length === 0) {
                 await db(this.uin, 'status').insert({
                     status: 1
                 })
@@ -41,12 +41,12 @@ const self = {
                 // 查是否有缓存好友列表、群列表
 
                 let cacheFriend = await db(this.uin, 'group').find()
-                if (cacheFriend.length == 0) {
+                if (cacheFriend.length === 0) {
                     this.logger.mark("缓存朋友列表");
                     await db(this.uin, 'group').insert(group)
                 }
                 let cacheGroup = await db(this.uin, 'friend').find()
-                if (cacheGroup.length == 0) {
+                if (cacheGroup.length === 0) {
                     this.logger.mark("缓存群列表");
 
                     await db(this.uin, 'friend').insert(friend)
@@ -55,8 +55,8 @@ const self = {
                 console.log(error);
             }
             try {
-                let cacheProfile = await db(this.uin, 'profile').find()
-                if (cacheProfile.length == 0) {
+                let cacheProfile = await db(this.uin, 'profile').find();
+                if (cacheProfile.length === 0) {
                     const user = new User(this, this.uin)
                     const simpleInfo = await user.getSimpleInfo()
                     this.logger.mark("个人信息");
@@ -119,7 +119,7 @@ const wsCallback = (conn) => {
                 break;
             case 'system.login.slider':
                 ociq = createClient(data.account, { platform: data.platform || 4 })
-                ociq.login(data.password)
+                await ociq.login(data.password)
                 //监听账号密码登录
                 self.onSystemLoginSlider((e) => sendData(conn, { ticket: e.url }, code))
                 //监听账号是否安全登录
@@ -143,9 +143,12 @@ const wsCallback = (conn) => {
                 ociq.submitSlider(String(data.ticket).trim())
                 break;
             case 'loginStatus':
-                let lineStatus = await db(data.account, 'status').findOne()
-                console.log(lineStatus);
-                sendData(conn, { account: data.account, status: lineStatus.status || -1, }, ociq.status > 0 ? 'loginStatus' : "")
+                let lineStatus = null
+                if (data.account) {
+                    lineStatus = await db(data.account, 'status').findOne()
+                }
+                let st = lineStatus ? lineStatus.status : -1
+                sendData(conn, { account: data.account, status: st }, ociq.status > 0 ? 'loginStatus' : "")
                 break
             case 'logout':
                 ociq.logout().then(async () => {
