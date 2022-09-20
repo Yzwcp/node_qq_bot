@@ -6,7 +6,7 @@
             <el-table-column prop="remark" label="备注" />
             <el-table-column prop="sex" label="性别">
                 <template #default="scope">
-                    {{scope.row.sex==='female'?'女':'男'}}
+                    {{scope.row.sex === 'female'?'女':'男' }}
                 </template>
             </el-table-column>
             <el-table-column prop="user_id" label="QQ" />
