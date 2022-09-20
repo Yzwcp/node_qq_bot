@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { useWebSocket } from '../../store/webSocket';
+import { useWebSocket } from '@/store/webSocket';
 import { BotEvent, platFormSelect } from '../types';
 import { Warning } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus'

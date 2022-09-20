@@ -22,7 +22,7 @@
 </template>
   
 <script lang="ts" setup scope>
-import { useBot } from '../../store/auth';
+import { useBot } from '@/store/auth';
 import { reactive,getCurrentInstance  } from 'vue'
 const allData: any = reactive({
     groupList: [],

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { getCurrentInstance, } from 'vue';
-import { service } from '../network/axios';
+import { service } from '@/network/axios';
 import { useRouter } from 'vue-router';
 import { useWebSocket } from './webSocket';
 
