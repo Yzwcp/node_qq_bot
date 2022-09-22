@@ -1,0 +1,16 @@
+# https://editorconfig.org
+
+#统一代码风格
+root = true
+
+[*] #表示所有文通用
+charset = utf-8
+indent_style = space #缩进风格 tab | space
+indent_size = 4#缩进大小
+end_of_line = lf#控制行类型 lr cr crlf
+insert_final_newline = true #去除行首任意空白符
+trim_trailing_whitespace = true #在末尾始终插入新行
+
+[*.md]
+insert_final_newline = false
+trim_trailing_whitespace = false

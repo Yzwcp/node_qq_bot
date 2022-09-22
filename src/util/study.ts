@@ -60,5 +60,7 @@ function func<T extends IFunc>(s: T): T {
 }
 // func(1);
 
+export {}
+
 //7 引入第三方库经常会报错 未声明类型 是因为ts有类型管理和查找规则
 //解决：在.d.ts文件声明 或者在https://www.typescriptlang.org/dt/search?seacrch=&search=day 查找对应声明文件
