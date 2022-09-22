@@ -4,4 +4,4 @@ import axios from "axios";
 // axios.interceptors.request(fn1,fn2)
 // axios.interceptors.response(fn1,fn2)
 
-export {}
+export {};

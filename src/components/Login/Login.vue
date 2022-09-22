@@ -1,14 +1,12 @@
 <template>
     <div class="login">
-        <qqAccountLogin>1</qqAccountLogin>
+        <qqAccountLogin ref="qqAccRef">1</qqAccountLogin>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import qqAccountLogin from './qqAccountLogin.vue';
+import { ref } from "vue";
+import qqAccountLogin from "./qqAccountLogin.vue";
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

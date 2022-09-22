@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 import type { ImRequestInterceptors, ImRequestConfig } from "@/network/types";
-
-export class MRequest {
+import { ElLoading } from "element-plus";
+// import { LoadingInstance } from "element-plus/es/components/loading/src/loading";
+export class mRequest {
     instance: AxiosInstance;
     interceptors?: ImRequestInterceptors; //扩展拦截器
     constructor(config: ImRequestConfig) {
@@ -17,13 +18,18 @@ export class MRequest {
             this.interceptors?.responseInterceptor, //赋值给axios响应成功
             this.interceptors?.responseInterceptorCatch //赋值给axios响应失败
         );
+
         //所有实例拦截器
         this.instance.interceptors.request.use(
-            (config) => config,
+            (config) => {
+                return config;
+            },
             (err) => err
         );
         this.instance.interceptors.response.use(
-            (config) => config,
+            (res) => {
+                return res.data;
+            },
             (err) => {
                 if (err.response.status === 404) {
                     console.log(404);
@@ -32,22 +38,30 @@ export class MRequest {
         );
     }
 
-    //单独请求的拦截
-    request(config: ImRequestConfig) {
-        if (config.interceptors?.requestInterceptor) {
-            config = config.interceptors.requestInterceptor(config);
-        }
-        this.instance
-            .request({
-                url: "/dd",
-                method: "get",
-            })
-            .then((res) => {
-                if (config.interceptors?.responseInterceptor) {
-                    res = config.interceptors.responseInterceptor(res);
-                }
-                console.log(res);
-            });
+    request<T>(config: ImRequestConfig<T>): Promise<T> {
+        return new Promise((resolve, reject) => {
+            //单独请求的拦截
+            if (config.interceptors?.requestInterceptor) {
+                config = config.interceptors.requestInterceptor(config);
+            }
+            this.instance
+                .request<any, T>(config)
+                .then((res) => {
+                    if (config.interceptors?.responseInterceptor) {
+                        res = config.interceptors.responseInterceptor(res);
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+    get<T>(config: ImRequestConfig<T>): Promise<T> {
+        return this.request<T>({ ...config, method: "get" });
+    }
+    post<T>(config: ImRequestConfig<T>): Promise<T> {
+        return this.request<T>({ ...config, method: "post" });
     }
     // 例如
     // requests({

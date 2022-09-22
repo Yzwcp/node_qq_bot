@@ -1,6 +1,6 @@
-import { MRequest } from "./mRequest";
+import { mRequest } from "./mRequest";
 
-export default new MRequest({
-    baseURL: import.meta.env.BASE_URL,
+export default new mRequest({
+    baseURL: import.meta.env.VITE_APP_BASE_URL,
     interceptors: {},
 });
