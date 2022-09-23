@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import { BotEvent } from "@/components/types";
+import { IBotLoginEvent, staticName } from "@/components/types";
 import { useBot } from "../auth/auth";
-import { IState, IWebSocketSend } from "@/store/webSocket/types";
-
+import { IState, IWebSocketResult } from "@/store/webSocket/types";
+import util from "@/util/util";
 export const useWebSocket = defineStore("WebSocket", {
     state: (): IState => {
         return {
@@ -24,7 +24,7 @@ export const useWebSocket = defineStore("WebSocket", {
         gLoading: (state) => state.loading,
     },
     actions: {
-        send(text: IWebSocketSend | string) {
+        send(text: IWebSocketResult | string) {
             if (typeof text === "string") return this.websocket.send(text);
             this.websocket.send(JSON.stringify(text));
         },
@@ -49,61 +49,43 @@ export const useWebSocket = defineStore("WebSocket", {
             clearTimeout(this.timeoutSend);
             clearTimeout(this.serverTimeoutNumber);
         },
-        onMessage(callBaclk: Function) {
+        async callBack({ code, data }: IWebSocketResult) {
+            switch (code) {
+                case IBotLoginEvent.loginEd:
+                    await useBot().login(data);
+                    util.betterStorage(staticName.ACCOUNT_QQ).set(data);
+                    break;
+                case IBotLoginEvent.loginOut:
+                    await useBot().logout(data);
+                    break;
+                case IBotLoginEvent.loginStatus:
+                    await useBot().login(data);
+                    break;
+                default:
+                    break;
+            }
+        },
+        async openSocket() {
+            this.needReconnect = true;
+            // 连接已准备好
             this.websocket.onmessage = (e: any) => {
-                console.log("在线");
                 this.reset();
                 let d = JSON.parse(e.data);
-                //10秒ping下后台 防止掉线
                 if (d.code !== "ping") {
                     this.code = d.code;
                     this.data = d.data;
+                    this.callBack(d);
                 }
-                callBaclk(d);
+                //10秒ping下后台 防止掉线
+                console.log("在线");
                 //已登录后
-                if (d.code === "logined") {
-                    useBot().login(d.data);
-                    localStorage.setItem("OCIQ_ACC", JSON.stringify(d.data));
-                }
                 // 查看登录状态
-                if (d.code === "loginStatus") {
-                    // 小于0 就是没登录
-                    if (d.data.status < 0) {
-                        // 取账号密码缓存 自动登录
-                        let loginInfo = JSON.parse(
-                            localStorage.getItem("OCIQ_ACC") || "[]"
-                        );
-                        if (loginInfo) {
-                            this.send({
-                                code: BotEvent.on.loginSlider,
-                                data: {
-                                    account: loginInfo.account,
-                                    password: loginInfo.password,
-                                    platform: loginInfo.platform,
-                                },
-                            });
-                        }
-                    } else {
-                        // 后台有登录就去取缓存数据
-                        useBot().login(d.data);
-                    }
-                }
-                if (d.code === "logout") {
-                    useBot().logout(d.data);
-                }
             };
-        },
-        openSocket() {
-            this.needReconnect = true;
-            // 监听websocket
-
-            // 连接已准备好
             this.websocket.onopen = (data: any) => {
                 this.loading = false;
                 this.start();
-                let loginInfo = JSON.parse(
-                    localStorage.getItem("OCIQ_ACC") || "[]"
-                );
+                let loginInfo = util.betterStorage(staticName.ACCOUNT_QQ).get();
+
                 if (loginInfo) {
                     this.send({
                         code: "loginStatus",

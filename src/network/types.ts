@@ -1,4 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
+import { Ref } from "vue";
 
 export interface ImRequestInterceptors<T = AxiosResponse> {
     requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig; //赋值给axios请求成功
@@ -9,4 +10,10 @@ export interface ImRequestInterceptors<T = AxiosResponse> {
 //配置每个实例的拦截器
 export interface ImRequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
     interceptors?: ImRequestInterceptors<T>;
+    loading?: Ref;
+}
+export interface IAxiosRes<T = any> {
+    data: T;
+    code: number;
+    msg: string;
 }

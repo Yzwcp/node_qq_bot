@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import type { ImRequestInterceptors, ImRequestConfig } from "@/network/types";
 import { ElLoading } from "element-plus";
 // import { LoadingInstance } from "element-plus/es/components/loading/src/loading";
-export class mRequest {
+export class betterRequest {
     instance: AxiosInstance;
     interceptors?: ImRequestInterceptors; //扩展拦截器
     constructor(config: ImRequestConfig) {
@@ -40,6 +40,10 @@ export class mRequest {
 
     request<T>(config: ImRequestConfig<T>): Promise<T> {
         return new Promise((resolve, reject) => {
+            // loading
+            if (config.loading) {
+                config.loading.value = true;
+            }
             //单独请求的拦截
             if (config.interceptors?.requestInterceptor) {
                 config = config.interceptors.requestInterceptor(config);
@@ -54,6 +58,11 @@ export class mRequest {
                 })
                 .catch((err) => {
                     reject(err);
+                })
+                .finally(() => {
+                    if (config.loading) {
+                        config.loading.value = false;
+                    }
                 });
         });
     }

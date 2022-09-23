@@ -1,13 +1,4 @@
 <template>
-    <div class="alert">
-        <el-alert
-            :closable="false"
-            title="with description"
-            type="success"
-            description="This is a description."
-        />
-    </div>
-
     <div class="header-avatar">
         <div style="margin-left: 4px">{{ bot.botInfo.nickname }}</div>
         <!-- <div>{{data.user?.uin}}</div> -->
@@ -58,8 +49,11 @@ const socket = useWebSocket();
 const bot = useBot();
 
 const logout = () => {
-    socket.send({ code: "logout" });
+    socket.send({ code: "logout" ,data:{}})
+
+
 };
+
 </script>
 
 <style scoped lang="less">

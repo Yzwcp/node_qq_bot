@@ -5,6 +5,9 @@ import { ref } from "vue";
 let ticket = ref("");
 const webSocket = useWebSocket();
 webSocket.openSocket();
+
+
+
 </script>
 
 <template>

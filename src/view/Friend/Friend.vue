@@ -20,27 +20,23 @@
 </template>
 
 <script lang="ts" setup scope>
-import { reactive, getCurrentInstance } from "vue";
+import { reactive,  } from "vue";
 import { useBot } from "@/store/auth/auth";
+import {getFriend} from "@/network/http";
 const allData: any = reactive({
     friendList: [],
     tableLoading: false,
 });
-const profile = useBot();
-const { $axios }: any =
-    getCurrentInstance()?.appContext.config.globalProperties;
+const bot = useBot();
 
 const initData = async () => {
     allData.tableLoading = true;
-    const { data, code } = await $axios({
-        url: "/client/friend",
-        params: { uin: profile.bot.uin },
-        method: "get",
-    });
+    const { data, code } = await getFriend( { uin: bot.botInfo.uin })
     if (code === 1) {
         allData.friendList = data;
     }
     allData.tableLoading = false;
-};
-initData();
+}
+
+initData()
 </script>

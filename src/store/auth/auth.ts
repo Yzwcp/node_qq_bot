@@ -1,38 +1,35 @@
 import { defineStore } from "pinia";
-import { getCurrentInstance } from "vue";
-import { service } from "@/network/axios";
-import { useRouter } from "vue-router";
-import { useWebSocket } from "../webSocket/webSocket";
+import { getFriend, getLoginStatus, getProfile } from "@/network/http";
+import { IState } from "@/store/auth/types";
 
 export const useBot = defineStore("Bot", {
-    state: () => {
+    state: (): IState => {
         return {
-            bot: {},
+            bot: {
+                uin: -1,
+            },
             status: -1,
         };
     },
     getters: {
-        botInfo: (state) => (state.status > -1 ? state.bot : {}),
+        botInfo: (state) => state.bot,
     },
     actions: {
         async login(loginInfo: { account: number }) {
-            const { data } = await service({
-                url: "/client/profile",
-                params: { uin: loginInfo?.account - 0 },
-            });
-            const statusData = await service({
-                url: "/client/status",
-                params: { uin: loginInfo?.account - 0 },
-            });
-            this.bot = data as Object;
-            this.status = statusData.data.status;
+            const params = { uin: loginInfo?.account - 0 };
+            const { data } = await getProfile(params);
+            const {
+                data: { status },
+            } = await getLoginStatus(params);
+            this.bot = data;
+            this.status = status;
         },
         async logout(loginInfo: { account: number }) {
-            const { data } = await service({
-                url: "/client/status",
-                params: { uin: loginInfo?.account - 0 },
-            });
-            this.status = data.status;
+            const params = { uin: loginInfo?.account - 0 };
+            const {
+                data: { status },
+            } = await getLoginStatus(params);
+            this.status = status;
             this.$reset();
         },
     },

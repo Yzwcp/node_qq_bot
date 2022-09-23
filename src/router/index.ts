@@ -53,6 +53,7 @@ router.beforeEach((to, from, next) => {
         setTimeout(() => {
             router.push({ path: "/setting/qqlogin" });
         }, 1000);
+        next();
     } else {
         next();
     }

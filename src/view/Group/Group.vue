@@ -2,7 +2,7 @@
     <el-card>
         <el-table
             :data="allData.groupList"
-            v-loading="allData.tableLoading"
+            v-loading="tableLoading"
             :style="{ width: '100%;' }"
             height="900"
         >
@@ -35,25 +35,20 @@
 
 <script lang="ts" setup scope>
 import { useBot } from "@/store/auth/auth";
-import { reactive, getCurrentInstance } from "vue";
+import { reactive,ref, getCurrentInstance } from "vue";
 import MRequest from "@/network";
+import {getFriend, getGroup} from "@/network/http";
 const allData: any = reactive({
     groupList: [],
-    tableLoading: false,
 });
-const profile = useBot();
+const tableLoading = ref(false)
+const bot = useBot();
 const initData = async () => {
-    allData.tableLoading = true;
-    await MRequest.request({
-        url: "/client/group",
-        method: "get",
-        params: { uin: profile.bot.uin },
-    });
-
+    // allData.tableLoading = true;
+    const p = { uin: bot.botInfo.uin }
+    const { data, code } = await getGroup( p,tableLoading )
     // allData.tableLoading = false;
-    // if (code === 1) {
-    //     allData.groupList = data;
-    // }
+    if (code === 1) allData.groupList = data
 };
 
 initData();

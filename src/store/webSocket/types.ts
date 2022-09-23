@@ -9,7 +9,7 @@ export interface IState {
     serverTimeoutNumber: number;
     loading: boolean;
 }
-export interface IWebSocketSend {
+export interface IWebSocketResult {
     code: string;
     data: any;
 }

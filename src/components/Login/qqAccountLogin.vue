@@ -29,7 +29,7 @@
             <el-form-item label="操作1">
                 <el-button @click="getTicket">获取登录密钥</el-button>
                 <div
-                    v-if="webSocket.code === BotEvent.on.loginSlider"
+                    v-if="webSocket.code === IBotLoginEvent.loginSlider"
                     style="margin-left: 10px; color: skyblue"
                 >
                     <a :href="webSocket.data?.ticket" target="_blank"
@@ -46,7 +46,7 @@
             <el-form-item
                 label="验证码"
                 prop="verificationCode"
-                v-if="webSocket.code === 'needCode'"
+                v-if="webSocket.code === IBotLoginEvent.needSmsCodeTips"
             >
                 <el-input
                     v-model="formData.verificationCode"
@@ -58,14 +58,14 @@
                             :disabled="false"
                             type="primary"
                         >
-                            {{ countdown == 60 ? "获取验证码" : countdown }}
+                            {{ countdown === 60 ? "获取验证码" : countdown }}
                         </el-button>
                     </template>
                 </el-input>
                 <el-icon
                     size="16px"
                     style="
-                        margin: 0px 4px 0 10px;
+                        margin: 0 4px 0 10px;
                         color: red;
                         display: inline-block;
                     "
@@ -76,7 +76,7 @@
                     >首次登录新设备需要获取密保手机验证码(验证完以后可以直接登录)</span
                 >
             </el-form-item>
-            <el-form-item label="操作3" v-if="webSocket.code === 'needCode'">
+            <el-form-item label="操作3" v-if="webSocket.code ===  IBotLoginEvent.needSmsCodeTips">
                 <el-button @click="replyVerificationCode" type="primary"
                     >登录</el-button
                 >
@@ -88,7 +88,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { useWebSocket } from "@/store/webSocket/webSocket";
-import { BotEvent, platFormSelect } from "../types";
+import { platFormSelect, IBotLoginEvent,staticName} from "../types";
 import { Warning } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 const formData = reactive({
@@ -103,7 +103,7 @@ const countdownTimer = ref<NodeJS.Timeout | null>();
 const webSocket = useWebSocket();
 
 const init = () => {
-    let loginInfo = JSON.parse(localStorage.getItem("OCIQ_ACC") || "1");
+    let loginInfo = JSON.parse(localStorage.getItem(staticName.ACCOUNT_QQ) || "1");
     if (loginInfo !== 1) {
         formData.account = loginInfo.account;
         formData.password = loginInfo.password;
@@ -118,7 +118,7 @@ const getTicket = () => {
         return;
     }
     webSocket.send({
-        code: BotEvent.on.loginSlider,
+        code: IBotLoginEvent.loginSlider,
         data: {
             account: formData.account,
             password: formData.password,
@@ -140,7 +140,7 @@ const replyTicket = () => {
             password: formData.password,
             platform: formData.platform,
         },
-        code: BotEvent.replay.ticket,
+        code: IBotLoginEvent.loginTicket,
     });
 };
 
@@ -152,7 +152,7 @@ const replyTicket = () => {
 const getVerificationCode = () => {
     webSocket.send({
         data: {},
-        code: BotEvent.replay.sendCode,
+        code: IBotLoginEvent.sendSmsCode,
     });
     countdownTimer.value = setInterval(() => {
         countdown.value--;
@@ -174,9 +174,12 @@ const replyVerificationCode = () => {
             password: formData.password,
             platform: formData.platform,
         },
-        code: BotEvent.replay.replayCode,
+        code: IBotLoginEvent.receiveSmsCode,
     });
 };
+
+
+
 </script>
 
 <style scoped></style>
