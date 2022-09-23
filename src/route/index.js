@@ -7,7 +7,4 @@ const qqLogin = require('./qqlogin/index.js')
 router
     .use(client)
     .use(qqLogin)
-
-
-
 module.exports = router
