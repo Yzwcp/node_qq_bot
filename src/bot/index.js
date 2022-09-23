@@ -70,7 +70,7 @@ const self = {
             } catch (error) {
                 console.log(error);
             }
-            sendData(conn, { status: this.status, ...data }, 'logined')
+            sendData(conn, { status: this.status, ...data }, 'loginEd')
 
         })
     },
@@ -151,10 +151,12 @@ const wsCallback = (conn) => {
                 sendData(conn, { account: data.account, status: st }, ociq.status > 0 ? 'loginStatus' : "")
                 break
             case 'logout':
-                ociq.logout().then(async () => {
-                    await db(self.uin, 'status').update({ status: 1 }, { $set: { status: -1 } })
-                    sendData(conn, { status: -1, account: self.uin }, code)
-                })
+                setTimeout(() => {
+                    ociq.logout().then(async () => {
+                        await db(self.uin, 'status').update({ status: 1 }, { $set: { status: -1 } })
+                        sendData(conn, { status: -1, account: self.uin }, code)
+                    })
+                }, 3000)
                 break;
             default:
                 break;
@@ -186,6 +188,7 @@ const wsCallback = (conn) => {
 }
 
 function sendData(c, data, code = '-1') {
+    console.log('send', JSON.stringify({ data, code }));
     c.sendText(data instanceof String ? data : JSON.stringify({ data, code }))
 }
 module.exports = {
