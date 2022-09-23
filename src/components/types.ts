@@ -6,18 +6,22 @@ export interface QQLogin {
     ticket: string;
     phoneCode: string;
 }
-export interface WebSocketType {}
-export enum WebSocketCode {
-    register = 1,
-}
 export enum IBotLoginEvent {
+    /*获取滑块验证*/
     loginSlider = "system.login.slider",
+    /*提交ticket 并登录*/
     loginTicket = "replayTicket",
+    /*触发安全登录 需要密保手机发送验证码登录*/
     needSmsCodeTips = "needCode",
+    /*发送验证码 60秒倒计时*/
     sendSmsCode = "sendCode",
+    /*填写验证码验证登录*/
     receiveSmsCode = "replayCode",
+    /*登录成功*/
     loginEd = "loginEd",
+    /*退出登录*/
     loginOut = "logout",
+    /*检查后台登录状态*/
     loginStatus = "loginStatus",
 }
 export declare enum Platform {
@@ -27,9 +31,11 @@ export declare enum Platform {
     iMac = 4,
     iPad = 5,
 }
+/*静态变量*/
 export const staticName = {
     ACCOUNT_QQ: "MY_ACCOUNT_Q",
 };
+/*登录标识 推荐imac*/
 export const platFormSelect = [
     { l: "Android", v: 1 },
     { l: "aPad", v: 2 },

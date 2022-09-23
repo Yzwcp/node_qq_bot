@@ -8,7 +8,7 @@
         >
             <el-table-column prop="group_name" label="群名称">
                 <template #default="scope">
-                    {{ scope.row.group_name }}
+                    {{ scope.row.member_count }}
                     <el-tag type="info">{{ scope.row.group_id }}</el-tag>
                 </template>
             </el-table-column>
@@ -38,17 +38,19 @@ import { useBot } from "@/store/auth/auth";
 import { reactive,ref, getCurrentInstance } from "vue";
 import MRequest from "@/network";
 import {getFriend, getGroup} from "@/network/http";
-const allData: any = reactive({
+import {GroupInfo} from "@/view/Group/types";
+type IAllData ={
+    groupList:Array<GroupInfo>
+}
+const allData:IAllData  = reactive({
     groupList: [],
 });
 const tableLoading = ref(false)
 const bot = useBot();
 const initData = async () => {
-    // allData.tableLoading = true;
     const p = { uin: bot.botInfo.uin }
     const { data, code } = await getGroup( p,tableLoading )
-    // allData.tableLoading = false;
-    if (code === 1) allData.groupList = data
+    if (code === 1) allData.groupList.push(data)
 };
 
 initData();

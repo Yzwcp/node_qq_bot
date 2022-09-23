@@ -6,7 +6,7 @@ import { ElMessage } from "element-plus";
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
-        // component: () => import('@/components/Login/Login.vue')
+        // component: () => import('@/components/Login/index.vue')
         redirect: "/my/friend",
         name: "friend",
         meta: {
@@ -15,7 +15,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: "/setting/qqlogin",
-        component: () => import("@/components/Login/Login.vue"),
+        component: () => import("@/components/Login/index.vue"),
         name: "login",
         meta: {
             title: "qq登录",

@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import { IBotLoginEvent, staticName } from "@/components/types";
 import { useBot } from "../auth/auth";
-import { IState, IWebSocketResult } from "@/store/webSocket/types";
+import { IWebSocketResult } from "@/store/webSocket/types";
 import util from "@/util/util";
 export const useWebSocket = defineStore("WebSocket", {
-    state: (): IState => {
+    state: () => {
         return {
             websocket: new WebSocket("ws://127.0.0.1:1126"),
             websocketTimeout: 0,

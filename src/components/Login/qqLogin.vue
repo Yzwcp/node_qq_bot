@@ -23,81 +23,10 @@
 </template>
 <script lang="ts" setup>
 
-import { reactive, ref, getCurrentInstance, onMounted } from 'vue'
-import { affixProps, FormInstance } from 'element-plus'
-import { QQLogin, WebSocketCode } from '../types';
+import { reactive, ref, } from 'vue'
 import { RefreshRight } from '@element-plus/icons-vue';
-type wsResultType = {
-    code: string,
-    data: Object | String,
-    msg: string
-}
-enum onStatusType {
-    loginQrcode = "login.qrcode",
-    loginQrcodeRefresh = "login.qrcode.refresh",
-    login = "login",
-}
-const ws = new WebSocket('ws://127.0.0.1:1126');
 let qrCodeRef = ref<HTMLDivElement>()
-const { $axios }: any = getCurrentInstance()?.appContext.config.globalProperties;
-// const active = ref(0)
 const statusStr = ref('获取qq登录二维码')
-let onStatus = ref('init')
-let wsResult = reactive<wsResultType>({
-    code: '',
-    data: {},
-    msg: '',
-})
-const loading = reactive({
-    qrLoading: false
-})
-const client = reactive({
-    data: {}
-})
-
-const qq = reactive<QQLogin>({
-    qqNO: '1494993218',
-    ticket: '',
-    phoneCode: ''
-})
-ws.onopen = function (e) {
-    console.log("连接服务器成功");
-}
-ws.onclose = function (e) {
-    console.log("服务器关闭");
-}
-ws.onmessage = function (e) {
-    console.log(e);
-
-    return
-    const [success, code] = e.data.split(':')
-    onStatus.value = code
-    switch (code) {
-        case onStatusType.loginQrcode:
-            if (success == 1) {
-                reloadQrImg()
-            }
-            //登录二维码
-            break;
-        case onStatusType.loginQrcodeRefresh:
-            if (success == 1) {
-                reloadQrImg()
-            }
-            break;
-        case onStatusType.login:
-            if (success == 1) {
-
-            }
-            break
-        default:
-            break;
-    }
-
-}
-const refresh = () => {
-    wsSend(onStatusType.loginQrcodeRefresh)
-    reloadQrImg()
-}
 // 重载图片
 const reloadQrImg = () => {
     console.log(qrCodeRef?.value?.childNodes);
@@ -113,13 +42,6 @@ const reloadQrImg = () => {
     }
     qrCodeRef.value?.appendChild(new_img)
 }
-const wsSend = (code = onStatusType.loginQrcodeRefresh) => {
-    ws.send(JSON.stringify({
-        code,
-        data: {}
-    }))
-}
-
 </script>
 <style lang="less" scoped>
 .qrCode {
