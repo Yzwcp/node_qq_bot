@@ -4,7 +4,10 @@
 		"express": "^4.18.1",
 		"koa": "^2.13.4",
 		"koa-bodyparser": "^4.3.0",
+		"koa-mount": "^4.0.0",
 		"koa-router": "^12.0.0",
+		"koa-static": "^5.0.0",
+		"koa2-cors": "^2.0.6",
 		"mime-types": "^2.1.35",
 		"nedb": "^1.8.0",
 		"nodejs-websocket": "^1.7.2",
@@ -17,6 +20,16 @@
 	},
 	"bin": "./app.js",
 	"pkg": {
-		"assets":["./websocket/*.js","./bot/*.js","./*.js","./route/*.js","./api/**/*.js","./runtime/**/*.js","./runtime/**/**/*.js","./runtime/*.js","./node_modules/**/*.js"]
+		"assets": [
+			"./websocket/*.js",
+			"./bot/*.js",
+			"./*.js",
+			"./route/*.js",
+			"./api/**/*.js",
+			"./runtime/**/*.js",
+			"./runtime/**/**/*.js",
+			"./runtime/*.js",
+			"./node_modules/**/*.js"
+		]
 	}
 }
