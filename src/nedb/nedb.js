@@ -2,7 +2,7 @@
 const path = require('path')
 const Datastore = require('nedb')
 function DB(uin, database) {
-  const pathName = path.join(process.cwd(), 'data', 'db', uin + "")
+  const pathName = path.join(__dirname, 'data', 'db', uin + "")
   let options = {
     filename: pathName + '/' + database + '.db',
     autoload: true,

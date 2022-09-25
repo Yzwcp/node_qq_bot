@@ -14,7 +14,7 @@ router.get('/test', async (ctx) => {
 })
 router.get('/loginqrcode', async (ctx) => {
     await sleep()
-    let filePath = path.join(process.cwd(), 'data/1774570823/qrcode.png')
+    let filePath = path.join(__dirname, 'data/1774570823/qrcode.png')
     let file = null;
     try {
         file = fs.readFileSync(filePath); //读取文件

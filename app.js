@@ -6,9 +6,9 @@ const serve = require('koa-static');
 const path =require("path")
 const ws = require('./src/websocket/index')
 var cors = require('koa2-cors');
-
 app.use(cors())
-app.use(serve('dist'))
+// process.cwd()
+app.use(serve( path.join(__dirname, 'dist')))
 app.use(bodyParser())
 app.use(router.routes());//启动路由
 app.use(router.allowedMethods());
