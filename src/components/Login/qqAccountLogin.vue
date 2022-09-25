@@ -76,7 +76,10 @@
                     >首次登录新设备需要获取密保手机验证码(验证完以后可以直接登录)</span
                 >
             </el-form-item>
-            <el-form-item label="操作3" v-if="webSocket.code ===  IBotLoginEvent.needSmsCodeTips">
+            <el-form-item
+                label="操作3"
+                v-if="webSocket.code === IBotLoginEvent.needSmsCodeTips"
+            >
                 <el-button @click="replyVerificationCode" type="primary"
                     >登录</el-button
                 >
@@ -88,9 +91,10 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { useWebSocket } from "@/store/webSocket/webSocket";
-import { platFormSelect, IBotLoginEvent,staticName} from "../types";
+import { platFormSelect, IBotLoginEvent, staticName } from "../types";
 import { Warning } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+import util from "@/util/util";
 const formData = reactive({
     account: "",
     password: "",
@@ -103,8 +107,8 @@ const countdownTimer = ref<NodeJS.Timeout | null>();
 const webSocket = useWebSocket();
 
 const init = () => {
-    let loginInfo = JSON.parse(localStorage.getItem(staticName.ACCOUNT_QQ) || "1");
-    if (loginInfo !== 1) {
+    let loginInfo = util.betterStorage(staticName.ACCOUNT_QQ).get();
+    if (loginInfo) {
         formData.account = loginInfo.account;
         formData.password = loginInfo.password;
         formData.platform = loginInfo.platform;
@@ -177,9 +181,6 @@ const replyVerificationCode = () => {
         code: IBotLoginEvent.receiveSmsCode,
     });
 };
-
-
-
 </script>
 
 <style scoped></style>

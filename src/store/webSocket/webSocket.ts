@@ -6,7 +6,7 @@ import util from "@/util/util";
 export const useWebSocket = defineStore("WebSocket", {
     state: () => {
         return {
-            websocket: new WebSocket("ws://127.0.0.1:1126"),
+            websocket: new WebSocket(staticName.WEB_SOCKET_URL),
             websocketTimeout: 0,
             needReconnect: true,
             code: "",
@@ -25,6 +25,8 @@ export const useWebSocket = defineStore("WebSocket", {
     },
     actions: {
         send(text: IWebSocketResult | string) {
+            if (this.websocket.readyState !== 1) return console.log("发送失败");
+
             if (typeof text === "string") return this.websocket.send(text);
             this.websocket.send(JSON.stringify(text));
         },
@@ -34,6 +36,7 @@ export const useWebSocket = defineStore("WebSocket", {
         },
         start() {
             // socket连接发送
+
             const self = this;
             this.timeoutSend = window.setTimeout(() => {
                 self.send({ data: { _t: new Date().getTime() }, code: "ping" });
@@ -66,9 +69,12 @@ export const useWebSocket = defineStore("WebSocket", {
             }
         },
         async openSocket() {
+            if (this.websocket.readyState !== 1)
+                this.websocket = new WebSocket(staticName.WEB_SOCKET_URL);
             this.needReconnect = true;
             // 连接已准备好
             this.websocket.onmessage = (e: any) => {
+                console.log(e);
                 this.reset();
                 let d = JSON.parse(e.data);
                 if (d.code !== "ping") {
@@ -82,6 +88,7 @@ export const useWebSocket = defineStore("WebSocket", {
                 // 查看登录状态
             };
             this.websocket.onopen = (data: any) => {
+                console.log(data);
                 this.loading = false;
                 this.start();
                 let loginInfo = util.betterStorage(staticName.ACCOUNT_QQ).get();

@@ -29,7 +29,7 @@ export function getLoginStatus(params: IParams): Promise<IAxiosRes> {
 export function getFriend(
     params: IParams,
     loading?: Ref<boolean>
-): Promise<IAxiosRes<FriendInfo>> {
+): Promise<IAxiosRes<FriendInfo[]>> {
     return mRequest.get({
         url: "/client/friend",
         params: params,
@@ -41,7 +41,7 @@ export function getGroup(
         uin: number;
     },
     loading?: Ref<boolean>
-): Promise<IAxiosRes<GroupInfo>> {
+): Promise<IAxiosRes<GroupInfo[]>> {
     return mRequest.get({
         url: "/client/group",
         params: params,

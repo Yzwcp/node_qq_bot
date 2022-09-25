@@ -1,4 +1,9 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import {
+    createRouter,
+    createWebHashHistory,
+    createWebHistory,
+    RouteRecordRaw,
+} from "vue-router";
 import pinia from "../store/index";
 import { useBot } from "@/store/auth/auth";
 import { ElMessage } from "element-plus";
@@ -40,7 +45,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes,
 });
 const bot = useBot(pinia);

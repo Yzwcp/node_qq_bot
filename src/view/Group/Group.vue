@@ -35,22 +35,21 @@
 
 <script lang="ts" setup scope>
 import { useBot } from "@/store/auth/auth";
-import { reactive,ref, getCurrentInstance } from "vue";
-import MRequest from "@/network";
-import {getFriend, getGroup} from "@/network/http";
-import {GroupInfo} from "@/view/Group/types";
-type IAllData ={
-    groupList:Array<GroupInfo>
-}
-const allData:IAllData  = reactive({
+import { reactive, ref, getCurrentInstance } from "vue";
+import { getFriend, getGroup } from "@/network/http";
+import { GroupInfo } from "@/view/Group/types";
+type IAllData = {
+    groupList: Array<GroupInfo>;
+};
+const allData: IAllData = reactive({
     groupList: [],
 });
-const tableLoading = ref(false)
+const tableLoading = ref(false);
 const bot = useBot();
 const initData = async () => {
-    const p = { uin: bot.botInfo.uin }
-    const { data, code } = await getGroup( p,tableLoading )
-    if (code === 1) allData.groupList.push(data)
+    const p = { uin: bot.botInfo.uin };
+    const { data, code } = await getGroup(p, tableLoading);
+    if (code === 1) allData.groupList.push(...data);
 };
 
 initData();

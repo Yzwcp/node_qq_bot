@@ -33,6 +33,7 @@ export declare enum Platform {
 }
 /*静态变量*/
 export const staticName = {
+    WEB_SOCKET_URL: import.meta.env.VITE_APP_WEB_SOCKET_URL,
     ACCOUNT_QQ: "MY_ACCOUNT_Q",
 };
 /*登录标识 推荐imac*/

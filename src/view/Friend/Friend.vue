@@ -3,7 +3,7 @@
         <!-- {{profile.userInfo}} -->
         <el-table
             :data="allData.friendList"
-            v-loading="allData.tableLoading"
+            v-loading="tableLoading"
             :style="{ width: '100%;' }"
             height="900"
         >
@@ -20,20 +20,20 @@
 </template>
 
 <script lang="ts" setup scope>
-import {reactive, ref,} from "vue";
+import { reactive, ref } from "vue";
 import { useBot } from "@/store/auth/auth";
-import {getFriend} from "@/network/http";
+import { getFriend } from "@/network/http";
 const allData: any = reactive({
     friendList: [],
 });
+
 const bot = useBot();
-const tableLoading = ref(false)
-
+const tableLoading = ref(false);
 const initData = async () => {
-    const p = { uin: bot.botInfo.uin }
-    const { data, code } = await getFriend( p,tableLoading)
-    if (code === 1)  allData.friendList.push(data)
-}
+    const p = { uin: bot.botInfo.uin };
+    const { data, code } = await getFriend(p, tableLoading);
+    if (code === 1) allData.friendList.push(...data);
+};
 
-initData()
+initData();
 </script>
