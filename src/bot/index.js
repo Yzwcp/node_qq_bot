@@ -1,9 +1,15 @@
 
-const { createClient, User, Client, Friend} = require("oicq")
+const { createClient, User, Client, Friend,Message,segment } = require("oicq")
 const db = require('../nedb/nedb')
 let ociq = new WeakMap()
+
+let {axiosGet} = require('./hook')
 const self = {
     uin: '',
+    test(){
+        const op =createClient(1222)
+        op.on('message',(e)=>{})
+    },
     onSystemLoginSlider(cb) {
         ociq.on('system.login.slider', cb)
     },
@@ -102,7 +108,97 @@ const self = {
             console.log(error);
         }
 
-    }
+    },
+    staticName(){
+        //1：三餐，2：超市，3：淘宝，4：买菜，5：交通，6：转账|红包，7:话费，8:房租电费，9：消费，10：其他"
+        const consumeTypeMap = {
+            1:'三餐',
+            2:'超市',
+            3:'淘宝',
+            4:'买菜',
+            5:'交通',
+            6:'转账|红包',
+            7:'话费',
+            8:'房租电费',
+            9:'消费',
+            10:'其他',
+        }
+
+        const incomeTypeMap = {
+            100:'薪资',101:'基金',102:'红包',104:'其他'
+        }
+        return {consumeTypeMap,incomeTypeMap}
+    },
+    keepAccount(e){
+        let {text} = e.message[0]
+        let textList = text.split('*')
+        let commandStr = ''
+        if(textList.length===3){
+            commandStr = text+"**"+e.user_id
+        }else if(textList.length===4){
+            commandStr = text+"*"+e.user_id
+        }
+        axiosGet('addDay',{commandStr}).then(res=>{
+            let data = res.data
+            if(res.code===1){
+                const {consumeTypeMap} = this.staticName()
+                let {consumeType,consumeTags,price,note,cTime,countDay,countDayTimes} = data
+                const testMessage = [
+                    '\n',
+                    `消费类型:${consumeTypeMap[consumeType]}\n`,
+                    `消费标签:${consumeTags}\n`,
+                    `消费金额:${price}¥\n`,
+                    `今日消费:${countDay}¥\n`,
+                    `今日支付:${countDayTimes}次\n`,
+                    `记录时间:${cTime}`,
+                ]
+                if(note)testMessage.push(`备注:${note}\n`)
+                testMessage.push('\n')
+                e.reply(testMessage)
+                return
+            }
+            e.reply([
+                '记录失败'+ res.msg
+            ])
+
+        }).catch(err=>{
+            console.log(err)
+        })
+        // axiosGet('queryDay',{}).then(res=>{
+        //     let data = res.data
+        //     if(res.code===1){
+        //         let { salary, deposit,daytotal,note,cTime} = data
+        //         const testMessage = [
+        //             `消费类型:${consumeTypeMap[consumeType]}\n`,
+        //             `消费标签:${consumeTags}\n`,
+        //             `消费金额:${price}¥\n`,
+        //             `记录时间:${cTime}\n`,
+        //             `备注:${note}\n`,
+        //         ]
+        //         e.reply(testMessage)
+        //         return
+        //     }
+        //     e.reply([
+        //         '记录失败'+ res.msg
+        //     ])
+        //
+        // }).catch(err=>{
+        //     console.log(err)
+        // })
+
+        // {
+        //     "_id": "633104dbd2b91200012df061",
+        //     "consumeType": 1,
+        //     "consumeTags": "午饭",
+        //     "qqer": 1494993218,
+        //     "price": 30,
+        //     "createTime": 1664156896836,
+        //     "updateTime": 1664156896836,
+        //     "note": "1494993218",
+        //     "cTime": "2022-09-26 09:48:16",
+        //     "uTime": "2022-09-26 09:48:16"
+        // }
+    },
 }
 const wsCallback = (conn) => {
     conn.on("text", async (str) => {
@@ -123,9 +219,18 @@ const wsCallback = (conn) => {
                 //监听账号上线
                 self.onSystemLine(conn, data)
                 //监听私聊消息
-                self.onMessage(async function (e) {
+                self.onMessage( function (e) {
                     const messageData = self.formatMessage(e)
-                    await db(this.uin, 'message').insert(messageData)
+                    if(e.post_type === 'message'){
+                        let {text} = e.message[0]
+                        //记账标识
+                        console.log(text)
+                        if(text.indexOf('*')>-1){
+                            self.keepAccount(e)
+                        }
+
+                    }
+                    // await db(this.uin, 'message').insert(messageData)
                     sendData(conn, messageData, 'message')
                 })
                 break;
