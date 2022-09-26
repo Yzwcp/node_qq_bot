@@ -150,10 +150,9 @@ const self = {
                     `消费金额:${price}¥\n`,
                     `今日消费:${countDay}¥\n`,
                     `今日支付:${countDayTimes}次\n`,
-                    `记录时间:${cTime}`,
+                    `记录时间:${cTime}\n`,
                 ]
                 if(note)testMessage.push(`备注:${note}\n`)
-                testMessage.push('\n')
                 e.reply(testMessage)
                 return
             }
@@ -228,6 +227,20 @@ const wsCallback = (conn) => {
                         if(text.indexOf('*')>-1){
                             self.keepAccount(e)
                         }
+                        if(text.indexOf('ls')>-1){
+                            console.log(1)
+                            const replayListLs = [
+                                '-消费类型-\n'
+                            ]
+                            const {consumeTypeMap} = self.staticName()
+                            for (let key  of Object.keys(consumeTypeMap)) {
+                                replayListLs.push(`${key}:${consumeTypeMap[key]}\n`)
+                            }
+                            console.log(replayListLs)
+                            e.reply(replayListLs)
+
+                        }
+
 
                     }
                     // await db(this.uin, 'message').insert(messageData)
