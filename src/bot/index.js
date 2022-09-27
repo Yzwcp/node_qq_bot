@@ -1,14 +1,14 @@
 
-const { createClient, User, Client, Friend,Message,segment } = require("oicq")
+const { createClient, User, Client, Friend, Message, segment } = require("oicq")
 const db = require('../nedb/nedb')
 let ociq = new WeakMap()
 
-let {axiosGet} = require('./hook')
+let { axiosGet } = require('./hook')
 const self = {
     uin: '',
-    test(){
-        const op =createClient(1222)
-        op.on('message',(e)=>{})
+    test() {
+        const op = createClient(1222)
+        op.on('message', (e) => { })
     },
     onSystemLoginSlider(cb) {
         ociq.on('system.login.slider', cb)
@@ -109,42 +109,41 @@ const self = {
         }
 
     },
-    staticName(){
+    staticName() {
         //1：三餐，2：超市，3：淘宝，4：买菜，5：交通，6：转账|红包，7:话费，8:房租电费，9：消费，10：其他"
         const consumeTypeMap = {
-            1:'三餐',
-            2:'超市',
-            3:'淘宝',
-            4:'买菜',
-            5:'交通',
-            6:'转账|红包',
-            7:'话费',
-            8:'房租电费',
-            9:'消费',
-            10:'其他',
+            1: '三餐',
+            2: '超市',
+            3: '淘宝',
+            4: '买菜',
+            5: '交通',
+            6: '转账|红包',
+            7: '话费',
+            8: '房租电费',
+            9: '消费',
+            10: '其他',
         }
 
         const incomeTypeMap = {
-            100:'薪资',101:'基金',102:'红包',104:'其他'
+            100: '薪资', 101: '基金', 102: '红包', 104: '其他'
         }
-        return {consumeTypeMap,incomeTypeMap}
+        return { consumeTypeMap, incomeTypeMap }
     },
-    keepAccount(e){
-        let {text} = e.message[0]
+    keepAccount(e) {
+        let { text } = e.message[0]
         let textList = text.split('*')
         let commandStr = ''
-        if(textList.length===3){
-            commandStr = text+"**"+e.user_id
-        }else if(textList.length===4){
-            commandStr = text+"*"+e.user_id
+        if (textList.length === 3) {
+            commandStr = text + "**" + e.user_id
+        } else if (textList.length === 4) {
+            commandStr = text + "*" + e.user_id
         }
-        axiosGet('addDay',{commandStr}).then(res=>{
+        axiosGet('addDay', { commandStr }).then(res => {
             let data = res.data
-            if(res.code===1){
-                const {consumeTypeMap} = this.staticName()
-                let {consumeType,consumeTags,price,note,cTime,countDay,countDayTimes} = data
+            if (res.code === 1) {
+                const { consumeTypeMap } = this.staticName()
+                let { consumeType, consumeTags, price, note, cTime, countDay, countDayTimes } = data
                 const testMessage = [
-                    '\n',
                     `消费类型:${consumeTypeMap[consumeType]}\n`,
                     `消费标签:${consumeTags}\n`,
                     `消费金额:${price}¥\n`,
@@ -152,15 +151,15 @@ const self = {
                     `今日支付:${countDayTimes}次\n`,
                     `记录时间:${cTime}\n`,
                 ]
-                if(note)testMessage.push(`备注:${note}\n`)
+                if (note) testMessage.push(`备注:${note}\n`)
                 e.reply(testMessage)
                 return
             }
             e.reply([
-                '记录失败'+ res.msg
+                '记录失败' + res.msg
             ])
 
-        }).catch(err=>{
+        }).catch(err => {
             console.log(err)
         })
         // axiosGet('queryDay',{}).then(res=>{
@@ -218,27 +217,36 @@ const wsCallback = (conn) => {
                 //监听账号上线
                 self.onSystemLine(conn, data)
                 //监听私聊消息
-                self.onMessage( function (e) {
+                self.onMessage(function (e) {
                     const messageData = self.formatMessage(e)
-                    if(e.post_type === 'message'){
-                        let {text} = e.message[0]
+                    if (e.post_type === 'message') {
+                        let { text } = e.message[0]
                         //记账标识
                         console.log(text)
-                        if(text.indexOf('*')>-1){
+                        if (text.indexOf('*') > -1) {
                             self.keepAccount(e)
                         }
-                        if(text.indexOf('ls')>-1){
-                            console.log(1)
+                        if (text.indexOf('pls') > -1) {
                             const replayListLs = [
                                 '-消费类型-\n'
                             ]
-                            const {consumeTypeMap} = self.staticName()
-                            for (let key  of Object.keys(consumeTypeMap)) {
+                            const { consumeTypeMap } = self.staticName()
+                            for (let key of Object.keys(consumeTypeMap)) {
                                 replayListLs.push(`${key}:${consumeTypeMap[key]}\n`)
                             }
                             console.log(replayListLs)
                             e.reply(replayListLs)
 
+                        }
+                        if (text.indexOf('sls') > -1) {
+                            const replayListLs = [
+                                '-存储类型-\n'
+                            ]
+                            const { incomeTypeMap } = self.staticName()
+                            for (let key of Object.keys(incomeTypeMap)) {
+                                replayListLs.push(`${key}:${incomeTypeMap[key]}\n`)
+                            }
+                            e.reply(replayListLs)
                         }
 
 
