@@ -2,7 +2,7 @@ const axios = require("axios");
 const p = (form) => {
   return new Promise((resolve, rejeck) => {
     axios({
-      url: "https://umep.ltd/acc",
+      url: "https://180418df-0c01-4d88-b075-eec3cf0b0ca2.bspapp.com/acc",
       data: form,
       method: "post",
     })
