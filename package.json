@@ -11,6 +11,7 @@
 		"koa2-cors": "^2.0.6",
 		"mime-types": "^2.1.35",
 		"nedb": "^1.8.0",
+		"node-schedule": "^2.1.0",
 		"nodejs-websocket": "^1.7.2",
 		"oicq": "^2.3.1",
 		"qs": "^6.11.0"

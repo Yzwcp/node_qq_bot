@@ -13,7 +13,6 @@ const platform = 3;
 const password = "qq......";
 const ociq = createClient(qqAccount, { platform });
 ociq.login(password);
-
 class Self{
     uin
     constructor(cb) {
@@ -38,12 +37,14 @@ class Self{
 class MessageDeal{
     static type;
     static text;
+    userId
     replayListLs = [];
-    msgEvent
+    reply
+    autoBot
     constructor(e) {
-        this.msgEvent = e
-        console.log('constructor',e)
-
+        this.autoBot = e.autoBot
+        this.userId = e.user_id
+        this.reply = e.reply  ? e.reply : null
         const {type,text} = e.message[0]
         this.type = type
         this.text = text
@@ -89,24 +90,30 @@ class MessageDeal{
             case 'als':
                 this.reqServer('queryDay','*',(data)=>{
                     const {
+                        day,
                         salary,//小金库
                         deposit,//需存款
                         daytotal,//今日总消费
                         lastMonthPayment,//上月还款
-                        sinceTheBeginningMonth,//本月至今总消费
+                        sinceTheBeginningMonth,//本月至今总消费 每日消费 加 上月还款 包括房租
                         monthPayTimes,//本月支付次数
                         time,
-                        day
+                        remainAlimony,
+                        alimony,//生活费 薪资-上月还款-需存款
+                        week,//本周消费数据
+                        byshxf
                     } = data
-
                     return [
                         `--财政Tips--`,
                         `本月总进帐：${salary}¥`,
                         `本月总存款：${deposit}¥`,
-                        `今日总消费：${daytotal}¥`,
-                        `上月应还款：${lastMonthPayment}¥`,
                         `本月总消费：${sinceTheBeginningMonth}¥`,
-                        `本月支付数：${monthPayTimes}笔`,
+                        `本月生活费：${alimony}¥`,
+                        `----------------------`,
+                        `本月生活消费：${byshxf}¥`,
+                        `本周生活消费：${week}¥`,
+                        `今日生活消费：${daytotal}¥`,
+                        `本月剩余生活费：${remainAlimony}¥`,
                         `查询一时间：${time}`
                     ]
                 })
@@ -116,7 +123,7 @@ class MessageDeal{
     }
     sendReplayListLs(err=null){
         if(err) {
-            this.msgEvent.reply([err]);
+            this.reply.reply([err]);
             return
         }
 
@@ -125,8 +132,8 @@ class MessageDeal{
             this.replayListLs.map(item=>{
                 sendMsgList.push(item+'\n')
             })
-            this.msgEvent.reply(sendMsgList);
-            this.replayListLs = []
+            ociq.pickFriend('1774570823').sendMsg(sendMsgList).then(r => console.log('发送成功'))
+            // this.reply.reply(sendMsgList);
         }
     }
     staticName() {
@@ -169,10 +176,10 @@ class MessageDeal{
         let commandStr = ''
         /*没备注*/
         if (textList.length === 3) {
-            commandStr = this.text + "**" + this.msgEvent.user_id
+            commandStr = this.text + "**" + this.userId
         } else if (textList.length === 4) {
             /*有备注*/
-            commandStr = this.text + "*" + this.msgEvent.user_id
+            commandStr = this.text + "*" + this.userId
         }else{
             this.sendReplayListLs('命令格式错误')
             return
