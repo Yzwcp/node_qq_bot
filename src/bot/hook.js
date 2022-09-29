@@ -2,11 +2,6 @@ const db = require("../nedb/nedb");
 const {axiosGet} = require("./http");
 const {
     createClient,
-    User,
-    Client,
-    Friend,
-    Message,
-    segment,
 } = require("oicq");
 const qqAccount = 2079637306;
 const platform = 3;
@@ -42,6 +37,7 @@ class MessageDeal{
     reply
     autoBot
     constructor(e) {
+        console.log(e)
         this.autoBot = e.autoBot
         this.userId = e.user_id
         this.reply = e.reply  ? e.reply : null
@@ -52,78 +48,118 @@ class MessageDeal{
         this.exeInit()
 
     }
+    /*显示消费类型*/
+    pls(){
+        this.replayListLs.push("--消费类型--")
+        const { consumeTypeMap } = this.staticName();
+        for (let key of Object.keys(consumeTypeMap)) {
+            this.replayListLs.push(`${key}：${consumeTypeMap[key]}`);
+        }
+    }
+    /*显示存储类型*/
+    sls(){
+        this.replayListLs.push("--存储类型--")
+        const { incomeTypeMap } = this.staticName();
+        for (let key of Object.keys(incomeTypeMap)) {
+            this.replayListLs.push(`${key}：${incomeTypeMap[key]}`);
+        }
+    }
+    ls(){
+        this.replayListLs.push("--命令--")
+        const commandTemp = {
+            pls: "消费类型",
+            sls: "存储类型",
+            used:'使用存款',
+            als:'全部信息',
+            example: "payMoney",
+            "1*10*饮料*可乐咖啡": "三餐-价格-标签-备注",
+            example2: "saveMoney",
+            "100*8000*1500*1000": "薪资-金额-需存款-上月还款",
+            "104*200*": "小金库加200",
+            example3: "used",
+            "ex:used 200": "使用存款200",
+        };
+        for (let key of Object.keys(commandTemp)) {
+            this.replayListLs.push(`${key}：${commandTemp[key]}`);
+        }
+    }
+    /*查询所有信息*/
+    als(){
+        this.reqServer('queryDay','*',(data)=>{
+            const {
+                day,
+                salary,//小金库
+                deposit,//需存款
+                daytotal,//今日总消费
+                lastMonthPayment,//上月还款
+                sinceTheBeginningMonth,//本月至今总消费 每日消费 加 上月还款 包括房租
+                monthPayTimes,//本月支付次数
+                time,
+                remainAlimony,
+                alimony,//生活费 薪资-上月还款-需存款
+                week,//本周消费数据
+                byshxf
+            } = data
+            return [
+                `--财政Tips--`,
+                `本月总进帐：${salary}¥`,
+                `本月总存款：${deposit}¥`,
+                `本月总消费：${sinceTheBeginningMonth}¥`,
+                `本月生活费：${alimony}¥`,
+                `----------------------`,
+                `本月生活消费：${byshxf}¥`,
+                `本周生活消费：${week}¥`,
+                `今日生活消费：${daytotal}¥`,
+                `本月剩余生活费：${remainAlimony}¥`,
+                `查询一时间：${time}`
+            ]
+        })
+    }
+    /*挪用存款*/
+    used(){
+        let price = this.text.split(' ')[1]
+
+        if(Number(price)===0)return this.sendReplayListLs('命令无效')
+        this.reqServer('useDeposit','used*'+price,(data)=>{
+            const {depositNew,depositOld} = data
+           return [
+                '存款变化通知',
+                `本次提取存款：${depositOld-depositNew}¥`,
+                `本月存款余额：${depositNew}¥`,
+            ]
+
+        })
+    }
     exeInit(){
         /*识别到消费或者存款*/
-        if (this.text.indexOf('*') > -1) {
+
+        if(this.text.indexOf('used')>-1 ){
+            this.used()
+        }
+        if (this.text.split('*').length>2) {
             this.consumptionAndSavings()
         }
         switch (this.text) {
             case "pls":
-                this.replayListLs.push("--消费类型--")
-                const { consumeTypeMap } = this.staticName();
-                for (let key of Object.keys(consumeTypeMap)) {
-                    this.replayListLs.push(`${key}：${consumeTypeMap[key]}`);
-                }
+                this.pls()
                 break;
             case "sls":
-                this.replayListLs.push("--存储类型--")
-                const { incomeTypeMap } = this.staticName();
-                for (let key of Object.keys(incomeTypeMap)) {
-                    this.replayListLs.push(`${key}：${incomeTypeMap[key]}`);
-                }
+                this.sls()
                 break;
             case "ls":
-                this.replayListLs.push("--命令--")
-                const commandTemp = {
-                    pls: "消费类型",
-                    sls: "存储类型",
-                    example: "payMoney",
-                    "1*10*饮料*可乐咖啡": "三餐-价格-标签-备注",
-                    example2: "saveMoney",
-                    "100*8000*1500*1000": "薪资-金额-需存款-上月还款",
-                    "104*200*": "小金库加200",
-                };
-                for (let key of Object.keys(commandTemp)) {
-                    this.replayListLs.push(`${key}：${commandTemp[key]}`);
-                }
+                this.ls()
                 break
             case 'als':
-                this.reqServer('queryDay','*',(data)=>{
-                    const {
-                        day,
-                        salary,//小金库
-                        deposit,//需存款
-                        daytotal,//今日总消费
-                        lastMonthPayment,//上月还款
-                        sinceTheBeginningMonth,//本月至今总消费 每日消费 加 上月还款 包括房租
-                        monthPayTimes,//本月支付次数
-                        time,
-                        remainAlimony,
-                        alimony,//生活费 薪资-上月还款-需存款
-                        week,//本周消费数据
-                        byshxf
-                    } = data
-                    return [
-                        `--财政Tips--`,
-                        `本月总进帐：${salary}¥`,
-                        `本月总存款：${deposit}¥`,
-                        `本月总消费：${sinceTheBeginningMonth}¥`,
-                        `本月生活费：${alimony}¥`,
-                        `----------------------`,
-                        `本月生活消费：${byshxf}¥`,
-                        `本周生活消费：${week}¥`,
-                        `今日生活消费：${daytotal}¥`,
-                        `本月剩余生活费：${remainAlimony}¥`,
-                        `查询一时间：${time}`
-                    ]
-                })
+                this.als()
+                break
         }
         this.sendReplayListLs()
 
     }
     sendReplayListLs(err=null){
+        console.log("err",err)
         if(err) {
-            this.reply.reply([err]);
+            ociq.pickFriend('1774570823').sendMsg([err]).then(r => console.log('发送成功'))
             return
         }
 
@@ -221,7 +257,9 @@ class MessageDeal{
     }
 }
 
+
 module.exports = {
     self:new Self(),
     MessageDeal,
+    ociq
 }

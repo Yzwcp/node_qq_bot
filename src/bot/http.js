@@ -21,10 +21,10 @@ function axiosGet(action, d) {
   };
   return p(body);
 }
-axiosGet('queryDay',{commandStr:'100*8100*1300**1774570823'}).then(res=>{
-    console.log(res)
-  // console.log(res.l)
-})
+// axiosGet('useDeposit',{commandStr:'used*100'}).then(res=>{
+//     console.log(res)
+//   // console.log(res.l)
+// })
 
 module.exports = {
   axiosGet,
