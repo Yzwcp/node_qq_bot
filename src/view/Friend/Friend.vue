@@ -21,7 +21,7 @@
 
 <script lang="ts" setup scope>
 import { reactive, ref } from "vue";
-import { useBot } from "@/store/auth/auth";
+import { useBot } from "@/store/botLogin/auth";
 import { getFriend } from "@/network/http";
 const allData: any = reactive({
     friendList: [],

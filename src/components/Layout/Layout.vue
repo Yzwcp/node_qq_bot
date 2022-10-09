@@ -23,6 +23,6 @@ import { useRoute } from "vue-router";
 import Menu from "./Menu.vue";
 import Header from "./Header.vue";
 import { useWebSocket } from "@/store/webSocket/webSocket";
-const socket = useWebSocket();
+// const socket = useWebSocket();
 // console.log();
 </script>

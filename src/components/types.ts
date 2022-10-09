@@ -1,6 +1,15 @@
 import { spaceProps } from "element-plus";
 import { type } from "os";
 
+export interface INormalLogin {
+    account: string;
+    password: string;
+}
+export interface INormalLoginRes<T = any> {
+    userInfo: any;
+    token: string;
+    menuList: T;
+}
 export interface QQLogin {
     qqNO: string;
     ticket: string;

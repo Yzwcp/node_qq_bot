@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts" setup scope>
-import { useBot } from "@/store/auth/auth";
+import { useBot } from "@/store/botLogin/auth";
 import { reactive, ref, getCurrentInstance } from "vue";
 import { getFriend, getGroup } from "@/network/http";
 import { GroupInfo } from "@/view/Group/types";

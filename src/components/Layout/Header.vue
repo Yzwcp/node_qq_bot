@@ -2,11 +2,12 @@
     <div class="header-avatar">
         <div style="margin-left: 4px">{{ bot.botInfo.nickname }}</div>
         <!-- <div>{{data.user?.uin}}</div> -->
+<!--        v-loading.fullscreen.lock="socket.gLoading"-->
+<!--        element-loading-text="请打开服务，加载中..."-->
         <el-dropdown>
             <div
                 class="rob_status"
-                v-loading.fullscreen.lock="socket.gLoading"
-                element-loading-text="请打开服务，加载中..."
+
             >
                 <img
                     src="@/assets/bot.svg"
@@ -43,16 +44,16 @@
 import { on } from "events";
 import { ref, toRefs, reactive } from "vue";
 // import { UserFilled } from '@element-plus/icons-vue';
-import { useBot } from "../../store/auth/auth";
+import { useBot } from "../../store/botLogin/auth";
 import { useWebSocket } from "../../store/webSocket/webSocket";
-const socket = useWebSocket();
+// const socket = useWebSocket();
 const bot = useBot();
 
-const logout = () => {
-    socket.send({ code: "logout" ,data:{}})
-
-
-};
+// const logout = () => {
+//     socket.send({ code: "logout" ,data:{}})
+//
+//
+// };
 
 </script>
 

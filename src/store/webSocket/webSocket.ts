@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { IBotLoginEvent, staticName } from "@/components/types";
-import { useBot } from "../auth/auth";
+import { useBot } from "../botLogin/auth";
 import { IWebSocketResult } from "@/store/webSocket/types";
 import util from "@/util/util";
 export const useWebSocket = defineStore("WebSocket", {

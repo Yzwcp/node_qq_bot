@@ -91,7 +91,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { useWebSocket } from "@/store/webSocket/webSocket";
-import { platFormSelect, IBotLoginEvent, staticName } from "../types";
+import { platFormSelect, IBotLoginEvent, staticName } from "../../types";
 import { Warning } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import util from "@/util/util";

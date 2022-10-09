@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Layout from "@/components/Layout/Layout.vue";
-import { useWebSocket } from "./store/webSocket/webSocket";
-useWebSocket().openSocket();
+// import { useWebSocket } from "./store/webSocket/webSocket";
+// useWebSocket().openSocket();
 
 
 </script>

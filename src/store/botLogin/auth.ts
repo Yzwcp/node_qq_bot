@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { getFriend, getLoginStatus, getProfile } from "@/network/http";
-import { IState } from "@/store/auth/types";
+import { IState } from "@/store/botLogin/types";
 
 export const useBot = defineStore("Bot", {
     state: (): IState => {

@@ -5,13 +5,13 @@ import {
     RouteRecordRaw,
 } from "vue-router";
 import pinia from "../store/index";
-import { useBot } from "@/store/auth/auth";
+import { useBot } from "@/store/botLogin/auth";
 import { ElMessage } from "element-plus";
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
-        // component: () => import('@/components/Login/index.vue')
+        // component: () => import('@/components/Login/normal-login.vue')
         redirect: "/my/friend",
         name: "friend",
         meta: {
@@ -51,7 +51,8 @@ const router = createRouter({
 const bot = useBot(pinia);
 router.beforeEach((to, from, next) => {
     // 判断有没有登录
-    console.log(to);
+    next();
+    return;
     if (to.path === "/setting/qqlogin") return next();
     if (!bot.botInfo._id) {
         // ElMessage.error('请登录')

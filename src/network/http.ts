@@ -1,14 +1,14 @@
-import axios from "axios";
 //fn1请求发送成功执行的函数
 //fn2请求发送失败执行的函数
 // axios.interceptors.request(fn1,fn2)
 // axios.interceptors.response(fn1,fn2)R
 import mRequest from "@/network";
-import { IBotProfile } from "@/store/auth/types";
+import { IBotProfile } from "@/store/botLogin/types";
 import { IAxiosRes } from "@/network/types";
 import { FriendInfo } from "@/view/Friend/types";
 import { GroupInfo } from "@/view/Group/types";
 import { Ref } from "vue";
+import { INormalLogin, INormalLoginRes } from "@/components/types";
 
 type IParams = {
     uin: number;
@@ -44,6 +44,17 @@ export function getGroup(
 ): Promise<IAxiosRes<GroupInfo[]>> {
     return mRequest.get({
         url: "/client/group",
+        params: params,
+        loading,
+    });
+}
+
+export function getNormalLoginInfo(
+    params: INormalLogin,
+    loading?: Ref<boolean>
+): Promise<IAxiosRes<INormalLoginRes>> {
+    return mRequest.get({
+        url: "/client/test",
         params: params,
         loading,
     });

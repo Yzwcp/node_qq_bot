@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Child: typeof import("@/components/Login/child/NormalLogin.vue")["default"]
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
@@ -34,8 +35,9 @@ declare module '@vue/runtime-core' {
     Layout: typeof import('./src/components/Layout/Layout.vue')['default']
     Login: typeof import('./src/components/Login/index.vue')['default']
     Menu: typeof import('./src/components/Layout/Menu.vue')['default']
-    QqAccountLogin: typeof import('./src/components/Login/qqAccountLogin.vue')['default']
-    QqLogin: typeof import('./src/components/Login/qqLogin.vue')['default']
+    NormalLogin: typeof import('./src/components/Login/child/normal-login.vue')['default']
+    QqAccountLogin: typeof import('./src/components/Login/child/qq-account-login.vue')['default']
+    QqLogin: typeof import('./src/components/Login/child/qq-Login.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
