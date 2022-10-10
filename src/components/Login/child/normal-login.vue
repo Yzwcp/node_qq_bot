@@ -26,16 +26,18 @@
 
 <script setup lang="ts">
 import {reactive, ref} from "vue";
+import {useRouter} from "vue-router";
 
 import qqAccountLogin from "./child/qqAccountLogin.vue";
 import {useLogin} from "@/store/normalLogin";
 const normalLogin = useLogin()
+const router = useRouter()
 const formData = ref({
     account:"",
     password:""
 });
 const login = () =>{
-     normalLogin.login(formData.value)
+     normalLogin.login(formData.value,router)
 }
 </script>
 

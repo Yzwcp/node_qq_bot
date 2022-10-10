@@ -6,6 +6,7 @@
 </template>
 
 <script setup lang="ts">
+
 import {onMounted, ref} from "vue";
 // import qqAccountLogin from "./child/qq-account-login.vue";
 import normalLogin from "./child/normal-login.vue";

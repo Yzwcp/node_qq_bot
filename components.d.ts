@@ -35,6 +35,7 @@ declare module '@vue/runtime-core' {
     Layout: typeof import('./src/components/Layout/Layout.vue')['default']
     Login: typeof import('./src/components/Login/index.vue')['default']
     Menu: typeof import('./src/components/Layout/Menu.vue')['default']
+    NoFound: typeof import('./src/components/NoFound/no-found.vue')['default']
     NormalLogin: typeof import('./src/components/Login/child/normal-login.vue')['default']
     QqAccountLogin: typeof import('./src/components/Login/child/qq-account-login.vue')['default']
     QqLogin: typeof import('./src/components/Login/child/qq-Login.vue')['default']

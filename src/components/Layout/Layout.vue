@@ -10,7 +10,7 @@
                 <Header></Header>
             </el-header>
             <el-main>
-                <router-view></router-view>
+                <Main></Main>
             </el-main>
             <el-footer>Footer</el-footer>
         </el-container>
@@ -22,6 +22,7 @@ import { ref, toRefs, reactive } from "vue";
 import { useRoute } from "vue-router";
 import Menu from "./Menu.vue";
 import Header from "./Header.vue";
+import Main  from "@/view/main/main.vue"
 import { useWebSocket } from "@/store/webSocket/webSocket";
 // const socket = useWebSocket();
 // console.log();

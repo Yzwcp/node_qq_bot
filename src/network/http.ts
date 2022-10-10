@@ -5,8 +5,8 @@
 import mRequest from "@/network";
 import { IBotProfile } from "@/store/botLogin/types";
 import { IAxiosRes } from "@/network/types";
-import { FriendInfo } from "@/view/Friend/types";
-import { GroupInfo } from "@/view/Group/types";
+import { FriendInfo } from "@/view/main/Friend/types";
+import { GroupInfo } from "@/view/main/Group/types";
 import { Ref } from "vue";
 import { INormalLogin, INormalLoginRes } from "@/components/types";
 

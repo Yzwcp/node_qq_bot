@@ -9,7 +9,7 @@
                 <span>{{ item.name }}</span>
             </template>
               <el-menu-item :index="subItem.url" v-for="subItem in item.children" :key="subItem.id">
-                  <router-link to="/setting/qqlogin">{{subItem.name}}</router-link>
+                  <div @click="handleMenu(subItem)">{{subItem.name}}</div>
               </el-menu-item>
         </el-sub-menu>
 <!--        <el-sub-menu index="/my">-->
@@ -38,21 +38,26 @@ import {
     Location,
     Setting,
 } from '@element-plus/icons-vue'
-import { useRoute } from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import {useLogin} from "@/store/normalLogin";
 import {ref} from "vue";
+
 const normalLogin = useLogin()
 const route = useRoute()
-
+const router = useRouter()
 const menuList  = ref([]);
 menuList.value = normalLogin.$state.menuList
 const handleOpen = (key: string, keyPath: string[]) => {
     // console.log(key, keyPath)
 }
 const handleClose = (key: string, keyPath: string[]) => {
-    console.log(key, keyPath)
+    // console.log(key, keyPath)
 }
 const select = (key: string, keyPath: string[]) => {
-    console.log(key, keyPath)
+    // console.log(key, keyPath)
+}
+const handleMenu = (subItem)=>{
+    console.log(subItem.url)
+    router.push(subItem.url)
 }
 </script>
