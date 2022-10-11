@@ -4,7 +4,7 @@ const router = require('./src/route/index.js')
 const bodyParser = require('koa-bodyparser')
 const serve = require('koa-static');
 const path = require("path")
-require('./src/noweb/index')
+// require('./src/noweb/index')
 // const ws = require('./src/websocket/index')
 var cors = require('koa2-cors');
 

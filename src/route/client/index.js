@@ -5,11 +5,61 @@ const fs = require('fs')
 const path = require('path')
 router.prefix('/client')
 const DB = require('../../nedb/nedb')
-
+const menu =  [{
+    children: [
+        {
+            id: 100,
+            name: "用户管理",
+            sort: 1,
+            parentId: 1,
+            type: 2,
+            url: "/main/system/user",
+            children: [
+                {
+                    id: 1000,
+                    name: "添加用户",
+                    parentId: 100,
+                    permission: 'system:user:delete',
+                    sort: null,
+                    type: 3,
+                    url: null,
+                }
+            ]
+        }
+    ],
+    icon: "el-icon-monitor",
+    id: 1,
+    name: "代码块",
+    sort: 1,
+    type: 1,
+    url: "/main/system",
+},{
+    children: [
+        {
+            id: 200,
+            name: "代码块",
+            sort: 1,
+            parentId: 2,
+            type: 2,
+            url: "/main/javascript/exampleBlock",
+        }
+    ],
+    icon: "el-icon-monitor",
+    id: 2,
+    name: "javascript",
+    sort: 1,
+    type: 1,
+    url: "/main/javascript",
+}]
 router.get('/test', async (ctx) => {
-    let data = await DB(ctx.query.uin, 'profile').find()
     ctx.body = {
-        data
+        code: 1,
+        data: {
+            userInfo: ctx.query,
+            token: "hesfgesl;kflse,wsadasdael2,e,a;wdaw",
+            menuList: menu,
+        },
+        msg: ''
     }
 })
 router.get('/loginqrcode', async (ctx) => {
