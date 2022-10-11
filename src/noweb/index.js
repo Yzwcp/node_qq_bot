@@ -38,7 +38,7 @@ function subwaySchedule(){
         autoBot:true,
         user_id:'1774570823'
     }
-    scheduleCron('0 50 8,17,22 * * 1,2,3,4,5',()=>new MessageDeal(temp))
+    scheduleCron('0 50 8,17 * * 1,2,3,4,5',()=>new MessageDeal(temp))
 }
 
 self.onMessage(function (e) {
