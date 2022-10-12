@@ -1,7 +1,7 @@
 
-let { axiosGet } = require("../bot/http");
+let { axiosGet } = require("../network/http");
 const { self, MessageDeal ,ociq} = require("../bot/hook");
-const {scheduleCron} = require("../bot/schedule");
+const {scheduleCron} = require("../util/schedule");
 const {
     createClient,
     User,

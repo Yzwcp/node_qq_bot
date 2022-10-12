@@ -1,5 +1,5 @@
 const db = require("../nedb/nedb");
-const {axiosGet} = require("./http");
+const {axiosGet} = require("../network/http");
 const {
     createClient,
 } = require("oicq");
