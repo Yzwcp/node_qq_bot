@@ -54,7 +54,7 @@ export function getNormalLoginInfo(
     loading?: Ref<boolean>
 ): Promise<IAxiosRes<INormalLoginRes>> {
     return mRequest.get({
-        url: "/client/test",
+        url: "/login/normal",
         params: params,
         loading,
     });
