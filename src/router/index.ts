@@ -69,7 +69,6 @@ router.beforeEach(async (to, from, next) => {
     // 判断有没有登录
     if (oneRun) {
         const menus = await mapToMenuRoutes(useLogin().menuList);
-        console.log(menus);
         menus.map((item) => {
             router.addRoute("main", item);
         });

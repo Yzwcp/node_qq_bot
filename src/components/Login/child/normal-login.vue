@@ -37,7 +37,7 @@ const formData = ref({
     password:""
 });
 const login = () =>{
-     normalLogin.login(formData.value,router)
+     normalLogin.login(formData.value)
 }
 </script>
 

@@ -35,5 +35,6 @@ declare module '@vue/runtime-core' {
     QqLogin: typeof import('./src/components/Login/child/qq-Login.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    WangEdit: typeof import('./src/components/WangEdit/wang-edit.vue')['default']
   }
 }

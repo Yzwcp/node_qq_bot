@@ -1,7 +1,7 @@
 <template>
     <div class="header-avatar">
         <div style="margin-left: 4px">{{ bot.botInfo.nickname }}</div>
-        <!-- <div>{{data.user?.uin}}</div> -->
+        <!-- <div>{{data.javascript?.uin}}</div> -->
 <!--        v-loading.fullscreen.lock="socket.gLoading"-->
 <!--        element-loading-text="请打开服务，加载中..."-->
         <el-dropdown>

@@ -1,6 +1,6 @@
 <template>
     <el-card>
-        user
+        javascript
     </el-card>
 </template>
 
