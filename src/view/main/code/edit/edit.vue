@@ -18,24 +18,20 @@
                 <el-button type="primary" @click="onSubmit">提交</el-button>
             </el-form-item>
         </el-form>
-        <MdEditorV3 v-model="value" class="md-editors"  ></MdEditorV3>
+        <MdEditorV3 v-model="value" class="md-editor"  ></MdEditorV3>
     </div>
   <!--    </el-card>-->
 </template>
 
-<script lang="ts" setup >
-import MdEditorV3 from '@/components/MdEditorV3/MdEditorV3.vue'
-import 'md-editor-v3/lib/style.css';
+<script lang="ts" setup scope>
+
 import {reactive, ref} from "vue";
 const formInline = reactive({})
-const value  = ref('')
-const onSubmit = () => {
-
-}
+const value = ref('')
 </script>
 
 <style lang="less" scoped>
-.md-editors{
+.md-editor{
   height: 600px;
 }
 </style>

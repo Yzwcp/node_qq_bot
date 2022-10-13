@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    CodeBlock: typeof import('./src/components/Code/CodeBlock.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
@@ -23,11 +24,14 @@ declare module '@vue/runtime-core' {
     ElMain: typeof import('element-plus/es')['ElMain']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
+    ElOption: typeof import('element-plus/es')['ElOption']
+    ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTag: typeof import('element-plus/es')['ElTag']
     Header: typeof import('./src/components/Layout/Header.vue')['default']
     Layout: typeof import('./src/components/Layout/Layout.vue')['default']
     Login: typeof import('./src/components/Login/index.vue')['default']
+    MdEditorV3: typeof import('./src/components/MdEditorV3/MdEditorV3.vue')['default']
     Menu: typeof import('./src/components/Layout/Menu.vue')['default']
     NoFound: typeof import('./src/components/NoFound/no-found.vue')['default']
     NormalLogin: typeof import('./src/components/Login/child/normal-login.vue')['default']

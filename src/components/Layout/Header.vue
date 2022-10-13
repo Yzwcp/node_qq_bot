@@ -50,7 +50,7 @@ import { useWebSocket } from "../../store/webSocket/webSocket";
 const bot = useBot();
 
 // const logout = () => {
-//     socket.send({ code: "logout" ,data:{}})
+//     socket.send({ Code: "logout" ,data:{}})
 //
 //
 // };

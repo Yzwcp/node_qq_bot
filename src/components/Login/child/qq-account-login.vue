@@ -149,8 +149,8 @@ const replyTicket = () => {
 };
 
 // webSocket.websocket.onmessage = (e: any) => {
-//     const { code, data, success } = JSON.parse(e.data)
-//     console.log(code, data, success);
+//     const { Code, data, success } = JSON.parse(e.data)
+//     console.log(Code, data, success);
 
 // }
 const getVerificationCode = () => {

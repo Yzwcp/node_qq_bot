@@ -437,7 +437,7 @@ packages:
 
   registry.npmmirror.com/@volar/code-gen/0.40.13:
     resolution: {integrity: sha512-4gShBWuMce868OVvgyA1cU5WxHbjfEme18Tw6uVMfweZCF5fB2KECG0iPrA9D54vHk3FeHarODNwgIaaFfUBlA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@volar/code-gen/-/code-gen-0.40.13.tgz}
-    name: '@volar/code-gen'
+    name: '@volar/Code-gen'
     version: 0.40.13
     dependencies:
       '@volar/source-map': registry.npmmirror.com/@volar/source-map/0.40.13
@@ -464,7 +464,7 @@ packages:
     name: '@volar/vue-language-core'
     version: 0.40.13
     dependencies:
-      '@volar/code-gen': registry.npmmirror.com/@volar/code-gen/0.40.13
+      '@volar/code-gen': registry.npmmirror.com/@volar/Code-gen/0.40.13
       '@volar/source-map': registry.npmmirror.com/@volar/source-map/0.40.13
       '@vue/compiler-core': registry.npmmirror.com/@vue/compiler-core/3.2.39
       '@vue/compiler-dom': registry.npmmirror.com/@vue/compiler-dom/3.2.39
@@ -478,7 +478,7 @@ packages:
     name: '@volar/vue-typescript'
     version: 0.40.13
     dependencies:
-      '@volar/code-gen': registry.npmmirror.com/@volar/code-gen/0.40.13
+      '@volar/code-gen': registry.npmmirror.com/@volar/Code-gen/0.40.13
       '@volar/typescript-faster': registry.npmmirror.com/@volar/typescript-faster/0.40.13
       '@volar/vue-language-core': registry.npmmirror.com/@volar/vue-language-core/0.40.13
     dev: true

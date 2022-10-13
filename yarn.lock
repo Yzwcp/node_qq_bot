@@ -97,6 +97,11 @@
   resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.185.tgz#c9843f5a40703a8f5edfd53358a58ae729816908"
   integrity sha512-evMDG1bC4rgQg4ku9tKpuMh5iBNEwNa3tf9zRHdP1qlv+1WUg44xat4IxCE14gIpZRGUUWAx2VhItCZc25NfMA==
 
+"@types/marked@^4.0.3":
+  version "4.0.7"
+  resolved "https://registry.npmjs.org/@types/marked/-/marked-4.0.7.tgz#400a76809fd08c2bbd9e25f3be06ea38c8e0a1d3"
+  integrity sha512-eEAhnz21CwvKVW+YvRvcTuFKNU9CV1qH+opcgVK3pIMI6YZzDm6gc8o2vHjldFk6MGKt5pueSB7IOpvpx5Qekw==
+
 "@types/node@^18.7.16":
   version "18.7.18"
   resolved "https://registry.npmjs.org/@types/node/-/node-18.7.18.tgz#633184f55c322e4fb08612307c274ee6d5ed3154"
@@ -834,6 +839,13 @@ make-dir@^2.1.0:
   dependencies:
     pify "^4.0.1"
     semver "^5.6.0"
+
+md-editor-v3@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/md-editor-v3/-/md-editor-v3-2.3.0.tgz#4402389fa838f9681a4b38ef26ef3a8b3a37908f"
+  integrity sha512-HZiOSwOct3YsuTtsTucEg5o9mSRkgnazVn2sTInjG+d+zlMQE6iCMmDyGICBoh5Im0kmX2Pf6Sxhz6qp/0XngQ==
+  dependencies:
+    "@types/marked" "^4.0.3"
 
 memoize-one@^6.0.0:
   version "6.0.0"
