@@ -1,6 +1,7 @@
 
 let { axiosGet } = require("../network/http");
-const { self, MessageDeal ,ociq} = require("../bot/hook");
+const { self ,ociq} = require("../bot/hook");
+const {MessageDeal} =require("../bot/message")
 const {scheduleCron} = require("../util/schedule");
 const {
     createClient,
@@ -29,16 +30,17 @@ self.onSystemLine((e) => {
     // 开启定时任务
     // 6个占位符从左到右分别代表：秒、分、时、日、月、周几 '30 * * * * *'
     // 周一至周五的上午10:15触发
-    subwaySchedule()
     console.log( e.self_id,"已上线");
 });
+subwaySchedule()
+
 function subwaySchedule(){
     const temp = {
         message:[{type:'text',text:'5*2.7*地铁'}],
         autoBot:true,
         user_id:'1774570823'
     }
-    scheduleCron('0 25 8,17,21 * * 1,2,3,4,5',()=>new MessageDeal(temp))
+    scheduleCron('0 50 8,17 * * 1,2,3,4,5',()=>new MessageDeal(temp))
 }
 
 self.onMessage(function (e) {

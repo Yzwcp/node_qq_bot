@@ -177,5 +177,6 @@ function sendData(c, data, code = '-1') {
 }
 module.exports = {
     wsCallback,
-    self
+    self,
+    ociq
 }
