@@ -22,7 +22,7 @@ function axiosGet(action, d) {
   return p(body);
 }
 axiosGet('queryDay',{commandStr:'*'}).then(res=>{
-    console.log(res)
+    // console.log(res)
   // console.log(res.l)
 })
 

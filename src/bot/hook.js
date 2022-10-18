@@ -3,7 +3,8 @@ const {axiosGet} = require("../network/http");
 const {
     createClient,
 } = require("oicq");
-const qqAccount = 1774570823;
+const qqAccount = 2079637306;
+// const qqAccount = 1774570823;
 const platform = 3;
 const password = "qq......";
 const ociq = createClient(qqAccount, { platform });

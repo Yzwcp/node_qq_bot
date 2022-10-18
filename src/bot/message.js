@@ -8,7 +8,6 @@ class MessageDeal{
     reply
     autoBot
     constructor(e) {
-        console.log(e)
         this.autoBot = e.autoBot
         this.userId = e.user_id
         this.reply = e.reply  ? e.reply : null

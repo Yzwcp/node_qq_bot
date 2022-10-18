@@ -35,12 +35,27 @@ self.onSystemLine((e) => {
 subwaySchedule()
 
 function subwaySchedule(){
+    console.log("发送定时任务成功")
+
     const temp = {
         message:[{type:'text',text:'5*2.7*地铁'}],
         autoBot:true,
         user_id:'1774570823'
     }
-    scheduleCron('0 50 8,17 * * 1,2,3,4,5',()=>new MessageDeal(temp))
+    scheduleCron('0 50 8,17 * * 1,2,3,4,5',()=>{
+        console.log("发送定时任务成功")
+        // 定时任务
+        new MessageDeal(temp)
+    })
+    function newIntervel() {
+        setTimeout(function () {
+            const h = new Date().getHours()
+            const m = new Date().getMinutes()
+            console.log(h+' '+m)
+            newIntervel()//调用自身
+        }, 1000*60*10)
+    }
+    newIntervel()
 }
 
 self.onMessage(function (e) {
